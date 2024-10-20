@@ -1,5 +1,4 @@
 import { ITargetResponse } from "@/interfaces/response/ITarget";
-import { apiService } from "@/service/axiosService";
 import { FC } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaListUl, FaTasks } from "react-icons/fa";
@@ -86,32 +85,12 @@ const TargetCard: FC<Props> = () => {
           </div>
         </div>
 
-        <button
-          className="btn btn-square btn-error"
-          onClick={async () => {
-            const fd = new FormData();
-            fd.append("name", "test");
-            const test = await apiService({
-              method: "POST",
-              path: "/upload/create",
-              Option: { data: fd },
-            });
-            console.log(test);
-          }}
-        >
-          test Api
-        </button>
-
         {/* status */}
         <div className="w-full flex justify-end items-center mt-4">
           <div className="badge badge-warning p-3 text-[12px] gap-1 shadow-md drop-shadow-md">
             <IoTimeOutline />
             درحال انجام
           </div>
-          {/* <div className="badge badge-success p-3 text-[12px] gap-2 shadow-md drop-shadow-md">
-            <FaCheck />
-            تمام شده
-          </div> */}
         </div>
       </div>
     </div>

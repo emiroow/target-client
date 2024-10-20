@@ -1,3 +1,4 @@
+import { BoardList } from "@/interfaces/response/IBoard";
 import { ITargetResponse } from "@/interfaces/response/ITarget";
 import { apiService } from "@/service/axiosService";
 import { useQuery } from "@tanstack/react-query";
@@ -20,7 +21,24 @@ const useBoard = () => {
     queryFn: getTargets,
   });
 
-  return { targets, targetsIsLoading };
+  const getBoardInfo = async () => {
+    const data = await apiService<BoardList>({
+      method: "GET",
+      path: "board/info",
+      Option: {
+        params: {
+          board: id,
+        },
+      },
+    });
+    return data;
+  };
+  const { data: boardInfo, isPending: boardInfoLoading } = useQuery({
+    queryKey: ["get-board-info"],
+    queryFn: getBoardInfo,
+  });
+
+  return { targets, targetsIsLoading, boardInfo, boardInfoLoading };
 };
 
 export default useBoard;
