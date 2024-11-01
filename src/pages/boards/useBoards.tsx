@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 const useBoards = () => {
   const [manageModal, setManageModal] = useState<{
     modalState: boolean;
-    actionType?: "create" | "edit" | "";
+    actionType?: "create" | "edit" | "delete" | "";
     board?: string;
   }>({
     modalState: false,
@@ -59,7 +59,13 @@ const useBoards = () => {
     }),
   });
 
-  const BoardFormik = useFormik<any>({
+  const BoardFormik = useFormik<{
+    backgroundImageUrl?: string;
+    date?: string;
+    emoji?: string;
+    name?: string;
+    selectBackgroundImageUrl?: string;
+  }>({
     validate: (value) => validateSchema(schema, value),
     initialValues: {
       backgroundImageUrl: "",
@@ -71,8 +77,17 @@ const useBoards = () => {
     onSubmit: (formData) => {
       const data = structuredClone(formData);
       delete data.selectBackgroundImageUrl;
-      if (manageModal.actionType === "create") createBoardMutation.mutate(data);
-      else updateBoardMutating.mutate({ id: manageModal.board, body: data });
+      switch (manageModal.actionType) {
+        case "create":
+          return createBoardMutation.mutate(data);
+        case "edit":
+          return updateBoardMutating.mutate({
+            id: manageModal.board,
+            body: data,
+          });
+        case "delete":
+          return deleteBoardMutating.mutate({ id: manageModal.board });
+      }
     },
   });
 
@@ -145,11 +160,10 @@ const useBoards = () => {
     },
   });
 
-  const deleteBoard = async (queryData: { id?: string; body?: any }) => {
+  const deleteBoard = async (queryData: { id?: string }) => {
     const data = apiService<any>({
       method: "DELETE",
       path: `board/delete/${queryData.id}`,
-      Option: { data: queryData.body },
     });
     return data;
   };
@@ -157,6 +171,11 @@ const useBoards = () => {
     mutationFn: deleteBoard,
     onSuccess: (response) => {
       queryClient.fetchQuery({ queryKey: ["GET_BOARDS"] });
+      setManageModal({
+        modalState: false,
+        actionType: "",
+        board: "",
+      });
       if (response.status) {
         toast.success(response.massage);
       }
@@ -187,6 +206,7 @@ const useBoards = () => {
     queryClient,
     BoardInfoMutating,
     updateBoardMutating,
+    deleteBoardMutating,
   };
 };
 

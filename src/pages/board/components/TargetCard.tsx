@@ -8,11 +8,11 @@ interface Props {
   data: ITargetResponse;
 }
 
-const TargetCard: FC<Props> = () => {
+const TargetCard: FC<Props> = ({ data }) => {
   return (
     <div className="flex-shrink-0 2xl:w-[20%] h-max xl:w-[30%] lg:w-[30%] md:w-[35%] sm:w-[40%] w-[95%]">
       <div className="flex justify-between ps-4 mb-1 items-center">
-        <span className="font-sansBold">عنوان</span>
+        <span className="font-sansBold">{data.title}</span>
         <button className="btn btn-ghost btn-sm btn-square text-primary">
           <BsThreeDotsVertical className="text-lg" />
         </button>
@@ -21,26 +21,19 @@ const TargetCard: FC<Props> = () => {
         <div className="w-full flex justify-between items-center">
           {/* icon */}
           <div className="w-max drop-shadow-2xl p-3 glass rounded-xl flex justify-center items-center self-center">
-            <span className="text-xl">❤️</span>
+            <span className="text-xl">{data.emoji}</span>
           </div>
           {/* subTitle */}
           <div className="w-full p-2">
-            <p className="font-sansRegular text-[13px]">
-              متن لورم ایپسوم فارسی
-            </p>
+            <p className="font-sansRegular text-[13px]">{data.subTitle} </p>
           </div>
           {/* difficulty */}
           <div className="badge badge-ghost p-3 text-white text-[12px]">
-            سختی
+            {data.difficulty}
           </div>
         </div>
 
-        <p className="text-sm mt-3">
-          لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده
-          از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و
-          سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای
-          متنوع با هدف بهبود ابزارهای کاربردی می باشد
-        </p>
+        <p className="text-sm mt-3">{data.description}</p>
 
         {/* recently */}
         <div className="w-full mt-4">
@@ -68,19 +61,19 @@ const TargetCard: FC<Props> = () => {
               <FaListUl className="text-primary" />
               <span className="text-sm">کل اهداف</span>
               <span>:</span>
-              <span className="text-sm">1</span>
+              <span className="text-sm">{data.totalTodo}</span>
             </section>
             <section className="flex items-center gap-2">
               <FaTasks className="text-success" />
               <span className="text-sm">اهداف انجام شده</span>
               <span>:</span>
-              <span className="text-sm">1</span>
+              <span className="text-sm">{data.totalDoneTodo}</span>
             </section>
             <section className="flex items-center gap-2">
               <PiListMagnifyingGlassBold className="text-xl text-warning" />
               <span className="text-sm">اهداف در انتظار انجام</span>
               <span>:</span>
-              <span className="text-sm">1</span>
+              <span className="text-sm">{data.totalPendingTodo}</span>
             </section>
           </div>
         </div>
@@ -89,7 +82,7 @@ const TargetCard: FC<Props> = () => {
         <div className="w-full flex justify-end items-center mt-4">
           <div className="badge badge-warning p-3 text-[12px] gap-1 shadow-md drop-shadow-md">
             <IoTimeOutline />
-            درحال انجام
+            {data.status}
           </div>
         </div>
       </div>

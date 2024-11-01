@@ -7,6 +7,7 @@ interface Props {
   modalStateSetter: any;
   title?: string;
   onCancel?: () => void;
+  onDelete?: () => void;
   onSubmit?: () => void;
   onCloseButton?: () => void;
   onCloseESC?: () => void;
@@ -14,6 +15,7 @@ interface Props {
   children: React.ReactElement;
   contentClass?: string;
   submitLoading?: boolean;
+  deleteLoading?: boolean;
   updateLoading?: boolean;
   size?: "w-1/5" | "w-2/5" | "w-3/5" | "w-4/5" | "w-5/5";
 }
@@ -30,8 +32,10 @@ const Modal: FC<Props> = ({
   size,
   submitLoading = false,
   updateLoading = false,
+  deleteLoading = false,
   loading = false,
   onEdit,
+  onDelete,
 }) => {
   if (modalState) {
     document.body.style.overflow = "hidden";
@@ -127,7 +131,18 @@ const Modal: FC<Props> = ({
                       انصراف
                     </button>
                   )}
-
+                  {onDelete && (
+                    <button
+                      onClick={onDelete}
+                      className="btn btn-error btn-sm text-white"
+                    >
+                      {deleteLoading ? (
+                        <span className="loading loading-spinner loading-md text-white"></span>
+                      ) : (
+                        "حذف"
+                      )}
+                    </button>
+                  )}
                   {onCloseButton && (
                     <button
                       onClick={() => {

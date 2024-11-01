@@ -30,7 +30,7 @@ const Board = () => {
           <div className="w-full"></div>
           {/* Targets */}
           <div className="w-full px-2 flex gap-3 mt-1 pb-5 h-max overflow-x-auto scroll-smooth">
-            {!targetsIsLoading ? (
+            {targetsIsLoading ? (
               <>
                 <BoardTargetSkeleton />
                 <BoardTargetSkeleton />

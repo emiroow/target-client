@@ -26,8 +26,9 @@ const Boards = () => {
     queryClient,
     BoardInfoMutating,
     updateBoardMutating,
+    deleteBoardMutating,
   } = useBoards();
-
+  console.log(BoardFormik.values);
   const [uploadLoader, setLoader] = useState(false);
   return (
     <>
@@ -52,6 +53,14 @@ const Boards = () => {
                 }}
                 key={index}
                 data={item}
+                deleteBoard={() => {
+                  BoardInfoMutating.mutate(item._id);
+                  setManageModal({
+                    modalState: true,
+                    actionType: "delete",
+                    board: item._id,
+                  });
+                }}
               />
             );
           })
@@ -70,17 +79,22 @@ const Boards = () => {
       {/* manage board Modal */}
       <Modal
         title={`${
-          manageModal.actionType === "create" ? "ایجاد" : "ویرایش"
+          manageModal.actionType === "create"
+            ? "ایجاد"
+            : manageModal.actionType === "edit"
+            ? "ویرایش"
+            : "حذف"
         } بورد ${manageModal.actionType === "create" ? "جدید" : ""}`}
         modalState={manageModal.modalState}
         modalStateSetter={setManageModal}
-        onCloseESC={() =>
+        onCloseESC={() => {
+          BoardFormik.resetForm();
           setManageModal({
             modalState: false,
             actionType: "",
             board: "",
-          })
-        }
+          });
+        }}
         onSubmit={
           manageModal.actionType === "create"
             ? () => BoardFormik.handleSubmit()
@@ -97,130 +111,185 @@ const Boards = () => {
             : undefined
         }
         loading={BoardInfoMutating.isPending}
-        onCloseButton={() =>
+        onCloseButton={() => {
+          BoardFormik.resetForm();
           setManageModal({
             modalState: false,
             actionType: "",
             board: "",
-          })
+          });
+        }}
+        onDelete={
+          manageModal.actionType === "delete"
+            ? () => BoardFormik.handleSubmit()
+            : undefined
         }
         submitLoading={createBoardMutation.isPending}
         updateLoading={updateBoardMutating.isPending}
+        deleteLoading={deleteBoardMutating.isPending}
       >
-        <div className="p-3 grid gap-3 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
-          <FormikTextInput formik={BoardFormik} name="name" label="نام" />
-          <FormikTextInput formik={BoardFormik} name="emoji" label="اموجی" />
-          <FormikDatePickerInput
-            formik={BoardFormik}
-            name="date"
-            label="تاریخ"
-            required
-          />
-          <div className="sm:col-span-3">
-            <div className=" border-secondary border rounded-lg relative">
-              <label htmlFor="file" className=" text-center  w-full h-max p-0">
-                <div className="w-full flex justify-center p-3 gap-3 items-center hover:text-secondary cursor-pointer">
-                  <span>آپلود عکس</span>
-                  <RiImageAddLine className="text-xl" />
+        <div className="delay-500 transition-all duration-500">
+          {manageModal.actionType === "create" ||
+          manageModal.actionType === "edit" ? (
+            <>
+              {BoardInfoMutating.isPending ? (
+                <div className="w-full flex justify-center items-center p-24">
+                  <span className="loading loading-spinner loading-md text-white"></span>
                 </div>
-                {uploadLoader && (
-                  <div className="w-full p-5">
-                    <span className="loading loading-ring loading-lg"></span>
-                  </div>
-                )}
-                {BoardFormik.values.backgroundImageUrl && (
-                  <div className="w-full bg-red-500 rounded-lg relative h-[35vh] ">
-                    <div
-                      className="absolute inset-0 bg-cover bg-center transition-transform duration-300 transform group-hover:scale-125 rounded-b-lg"
-                      style={{
-                        backgroundImage: `url("${BoardFormik.values.backgroundImageUrl}")`,
-                      }}
-                    ></div>
-                  </div>
-                )}
-              </label>
+              ) : (
+                <div className="p-3 grid gap-3 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
+                  <FormikTextInput
+                    formik={BoardFormik}
+                    name="name"
+                    label="نام"
+                  />
+                  <FormikTextInput
+                    formik={BoardFormik}
+                    name="emoji"
+                    label="اموجی"
+                  />
+                  <FormikDatePickerInput
+                    formik={BoardFormik}
+                    name="date"
+                    label="تاریخ"
+                    required
+                  />
+                  <div className="sm:col-span-3">
+                    <div className=" border-secondary border rounded-lg relative">
+                      <label
+                        htmlFor="file"
+                        className=" text-center  w-full h-max p-0"
+                      >
+                        <div className="w-full flex justify-center p-3 gap-3 items-center hover:text-secondary cursor-pointer">
+                          <span>آپلود عکس</span>
+                          <RiImageAddLine className="text-xl" />
+                        </div>
+                        {uploadLoader && (
+                          <div className="w-full p-5">
+                            <span className="loading loading-ring loading-lg"></span>
+                          </div>
+                        )}
+                        {BoardFormik.values.backgroundImageUrl && (
+                          <div className="w-full bg-red-500 rounded-lg relative h-[35vh] ">
+                            <div
+                              className="absolute inset-0 bg-cover bg-center transition-transform duration-300 transform group-hover:scale-125 rounded-b-lg"
+                              style={{
+                                backgroundImage: `url("${BoardFormik.values.backgroundImageUrl}")`,
+                              }}
+                            ></div>
+                          </div>
+                        )}
+                      </label>
 
-              {BoardFormik.values.backgroundImageUrl && (
-                <button
-                  onClick={() => {
-                    BoardFormik.setFieldValue("backgroundImageUrl", "");
-                    BoardFormik.setFieldValue("selectBackgroundImageUrl", "");
-                    queryClient.refetchQueries({ queryKey: ["GET_UPLOADS"] });
-                  }}
-                  className="btn btn-outline btn-xs btn-circle btn-error absolute top-14 left-3 z-50"
-                >
-                  <MdClose />
-                </button>
-              )}
-              <input
-                disabled={!!BoardFormik.values.backgroundImageUrl}
-                onChange={async (event) => {
-                  if (event.target.files && event.target.files[0]) {
-                    const img = event.target.files[0];
-                    const fd = new FormData();
-                    fd.append("name", img.name);
-                    fd.append("image", img);
-                    setLoader(true);
-                    try {
-                      const uploadImage = await apiService<{
-                        name: string;
-                        url: string;
-                        fullUrl: string;
-                      }>({
-                        method: "POST",
-                        path: "/upload/create",
-                        Option: {
-                          data: fd,
-                          headers: {
-                            "Content-Type": "multipart/form-data",
-                          },
-                        },
-                      });
-                      const fullUrl = `${import.meta.env.VITE_FILE_BASE_URL}${
-                        uploadImage.data?.url
-                      }`;
-                      if (uploadImage.status) {
-                        BoardFormik.setFieldValue(
-                          "backgroundImageUrl",
-                          fullUrl
-                        );
-                      } else {
-                        toast.error(uploadImage.massage);
-                      }
-                    } catch (error) {
-                      toast.error("خطا در آپلود عکس");
+                      {BoardFormik.values.backgroundImageUrl && (
+                        <button
+                          onClick={() => {
+                            BoardFormik.setFieldValue("backgroundImageUrl", "");
+                            BoardFormik.setFieldValue(
+                              "selectBackgroundImageUrl",
+                              ""
+                            );
+                            queryClient.refetchQueries({
+                              queryKey: ["GET_UPLOADS"],
+                            });
+                          }}
+                          className="btn btn-outline btn-xs btn-circle btn-error absolute top-14 left-3 z-50"
+                        >
+                          <MdClose />
+                        </button>
+                      )}
+                      <input
+                        disabled={!!BoardFormik.values.backgroundImageUrl}
+                        onChange={async (event) => {
+                          if (event.target.files && event.target.files[0]) {
+                            const img = event.target.files[0];
+                            const fd = new FormData();
+                            fd.append("name", img.name);
+                            fd.append("image", img);
+                            setLoader(true);
+                            try {
+                              const uploadImage = await apiService<{
+                                name: string;
+                                url: string;
+                                fullUrl: string;
+                              }>({
+                                method: "POST",
+                                path: "/upload/create",
+                                Option: {
+                                  data: fd,
+                                  headers: {
+                                    "Content-Type": "multipart/form-data",
+                                  },
+                                },
+                              });
+                              const fullUrl = `${
+                                import.meta.env.VITE_FILE_BASE_URL
+                              }${uploadImage.data?.url}`;
+                              if (uploadImage.status) {
+                                BoardFormik.setFieldValue(
+                                  "backgroundImageUrl",
+                                  fullUrl
+                                );
+                              } else {
+                                toast.error(uploadImage.massage);
+                              }
+                            } catch (error) {
+                              toast.error("خطا در آپلود عکس");
+                            }
+                            setLoader(false);
+                          }
+                        }}
+                        type="file"
+                        id="file"
+                        dir="ltr"
+                        className="col-span-3 file-input file-input-bordered file-input-secondary hidden"
+                      />
+                    </div>
+                    <FormikError
+                      name="backgroundImageUrl"
+                      formik={BoardFormik}
+                    />
+                  </div>
+                  <FormikSelectInput
+                    options={
+                      uploads?.data?.map((item: any) => {
+                        return { label: item.name, value: item.url };
+                      }) || []
                     }
-                    setLoader(false);
-                  }
-                }}
-                type="file"
-                id="file"
-                dir="ltr"
-                className="col-span-3 file-input file-input-bordered file-input-secondary hidden"
-              />
-            </div>
-            <FormikError name="backgroundImageUrl" formik={BoardFormik} />
-          </div>
-          <FormikSelectInput
-            options={
-              uploads?.data?.map((item: any) => {
-                return { label: item.name, value: item.url };
-              }) || []
-            }
-            formik={BoardFormik}
-            name="selectBackgroundImageUrl"
-            label="انتخاب عکس"
-            placeholder="عکس مورد نظر خودرا انتخاب کنید"
-            className="sm:col-span-3"
-            disable={!!BoardFormik.values.backgroundImageUrl}
-            disableRemoveBtn={!BoardFormik.values.backgroundImageUrl}
-            onExtraChange={(e) => {
-              const fullUrl = `${import.meta.env.VITE_FILE_BASE_URL}${
-                e.target.value
-              }`;
-              BoardFormik.setFieldValue("backgroundImageUrl", fullUrl);
-            }}
-          />
+                    formik={BoardFormik}
+                    name="selectBackgroundImageUrl"
+                    label="انتخاب عکس"
+                    placeholder="عکس مورد نظر خودرا انتخاب کنید"
+                    className="sm:col-span-3"
+                    disable={!!BoardFormik.values.backgroundImageUrl}
+                    disableRemoveBtn={!BoardFormik.values.backgroundImageUrl}
+                    onExtraChange={(e) => {
+                      const fullUrl = `${import.meta.env.VITE_FILE_BASE_URL}${
+                        e.target.value
+                      }`;
+                      BoardFormik.setFieldValue("backgroundImageUrl", fullUrl);
+                    }}
+                  />
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              {BoardInfoMutating.isPending ? (
+                <div className="w-full flex justify-center items-center p-24">
+                  <span className="loading loading-spinner loading-md text-white"></span>
+                </div>
+              ) : (
+                <div className="text-center mt-10 text-xl mb-5">
+                  آیا از خذف بورد{" "}
+                  <span className="text-secondary font-bold">
+                    {BoardFormik.values.name}
+                  </span>
+                  مطمئن هستید ؟
+                </div>
+              )}
+            </>
+          )}
         </div>
       </Modal>
 
