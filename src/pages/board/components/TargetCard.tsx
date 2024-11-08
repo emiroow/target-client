@@ -1,4 +1,8 @@
 import { ITargetResponse } from "@/interfaces/response/ITarget";
+import {
+  targetDifficultyDecider,
+  targetStatusDecider,
+} from "@/utils/common/deciders";
 import { FC } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaListUl, FaTasks } from "react-icons/fa";
@@ -29,7 +33,7 @@ const TargetCard: FC<Props> = ({ data }) => {
           </div>
           {/* difficulty */}
           <div className="badge badge-ghost p-3 text-white text-[12px]">
-            {data.difficulty}
+            {targetDifficultyDecider(data.difficulty)}
           </div>
         </div>
 
@@ -82,7 +86,7 @@ const TargetCard: FC<Props> = ({ data }) => {
         <div className="w-full flex justify-end items-center mt-4">
           <div className="badge badge-warning p-3 text-[12px] gap-1 shadow-md drop-shadow-md">
             <IoTimeOutline />
-            {data.status}
+            {targetStatusDecider(data.status)}
           </div>
         </div>
       </div>

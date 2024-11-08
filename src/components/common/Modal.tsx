@@ -12,6 +12,7 @@ interface Props {
   onCloseButton?: () => void;
   onCloseESC?: () => void;
   onEdit?: () => void;
+  onCloseBackDrop?: () => void;
   children: React.ReactElement;
   contentClass?: string;
   submitLoading?: boolean;
@@ -36,6 +37,7 @@ const Modal: FC<Props> = ({
   loading = false,
   onEdit,
   onDelete,
+  onCloseBackDrop,
 }) => {
   if (modalState) {
     document.body.style.overflow = "hidden";
@@ -73,7 +75,7 @@ const Modal: FC<Props> = ({
                   {onCloseESC && (
                     <button
                       onClick={() => {
-                        modalStateSetter(false);
+                        modalStateSetter({});
                         onCloseESC?.();
                       }}
                       className="btn btn-xs btn-circle btn-outline btn-error"
@@ -146,8 +148,8 @@ const Modal: FC<Props> = ({
                   {onCloseButton && (
                     <button
                       onClick={() => {
-                        modalStateSetter(false);
-                        onCloseButton();
+                        modalStateSetter({});
+                        onCloseButton?.();
                       }}
                       className="btn btn-secondary btn-sm text-white"
                     >
@@ -160,7 +162,8 @@ const Modal: FC<Props> = ({
             {/* back Drop */}
             <div
               onClick={() => {
-                modalStateSetter(false);
+                modalStateSetter({});
+                onCloseBackDrop?.();
               }}
               className=" w-full h-full fixed top-0 -z-40"
             ></div>

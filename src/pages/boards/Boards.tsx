@@ -28,7 +28,6 @@ const Boards = () => {
     updateBoardMutating,
     deleteBoardMutating,
   } = useBoards();
-  console.log(BoardFormik.values);
   const [uploadLoader, setLoader] = useState(false);
   return (
     <>
@@ -281,11 +280,11 @@ const Boards = () => {
                 </div>
               ) : (
                 <div className="text-center mt-10 text-xl mb-5">
-                  آیا از خذف بورد{" "}
+                  <span> آیا از خذف بورد </span>
                   <span className="text-secondary font-bold">
                     {BoardFormik.values.name}
                   </span>
-                  مطمئن هستید ؟
+                  <span> مطمئن هستید ؟</span>
                 </div>
               )}
             </>
