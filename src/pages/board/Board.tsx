@@ -4,7 +4,9 @@ import FormikSelectInput from "@/components/common/FormikSelectInput";
 import FormikTextInput from "@/components/common/FormikTextInput";
 import Modal from "@/components/common/Modal";
 import { apiService } from "@/service/axiosService";
+import { motion } from "framer-motion";
 import { BiSolidEditAlt } from "react-icons/bi";
+import { IoIosCreate } from "react-icons/io";
 import { MdClose } from "react-icons/md";
 import { RiImageAddLine } from "react-icons/ri";
 import { toast } from "react-toastify";
@@ -27,43 +29,64 @@ const Board = () => {
     uploads,
     uploadLoader,
     setLoader,
+    createTarget,
+    setCreateTarget,
+    createTargetFormik,
   } = useBoard();
 
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0, scale: 1 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{
+        duration: 0.8,
+        delay: 0.1,
+        ease: [0, 0.71, 0.2, 1.01],
+      }}
+    >
       {boardInfoLoading ? (
         <BoardHeadSkeleton />
       ) : (
         <div className="w-full">
-          {/* Board Name */}
-          <div className="w-full py-5 flex gap-3 items-center">
-            <span className="w-12 h-12 text-center items-center text-2xl self-center justify-center flex rounded-full bg-secondary/10 drop-shadow-xl shadow-xl glass ">
-              {boardInfo?.data?.emoji}
-            </span>
-            <span className="text-2xl text-secondary font-sansBold">
-              {boardInfo?.data?.name}
-            </span>
+          <div className="w-full flex justify-between items-center ">
+            {/* Board Name & edit */}
+            <div className="py-5 flex gap-3 items-center">
+              <span className="w-12 h-12 text-center items-center text-2xl self-center justify-center flex rounded-full bg-secondary/10 drop-shadow-xl shadow-xl glass ">
+                {boardInfo?.data?.emoji}
+              </span>
+              <span className="text-2xl text-secondary font-sansBold">
+                {boardInfo?.data?.name}
+              </span>
 
-            {/* edit Board */}
+              {/* edit Board */}
+              <button
+                onClick={() => {
+                  setBoardEditModal({ boardId: id, boardState: true });
+                  BoardFormik.setValues({
+                    backgroundImageUrl: boardInfo?.data?.backgroundImageUrl,
+                    date: boardInfo?.data?.date,
+                    emoji: boardInfo?.data?.emoji,
+                    name: boardInfo?.data?.name,
+                    selectBackgroundImageUrl: "",
+                  });
+                }}
+                className="btn btn-ghost btn-sm btn-circle p-1"
+              >
+                <BiSolidEditAlt className="text-2xl text-success" />
+              </button>
+            </div>
+
             <button
               onClick={() => {
-                setBoardEditModal({ boardId: id, boardState: true });
-                BoardFormik.setValues({
-                  backgroundImageUrl: boardInfo?.data?.backgroundImageUrl,
-                  date: boardInfo?.data?.date,
-                  emoji: boardInfo?.data?.emoji,
-                  name: boardInfo?.data?.name,
-                  selectBackgroundImageUrl: "",
-                });
+                setCreateTarget(true);
               }}
-              className="btn btn-ghost btn-sm btn-circle p-1"
+              className="btn btn-secondary btn-md btn-outline group"
+              type="button"
             >
-              <BiSolidEditAlt className="text-2xl text-success" />
+              <IoIosCreate className="text-xl group-hover:text-white" />
+              <span className="group-hover:text-white">ایجاد تارگت</span>
             </button>
           </div>
-
-          {/* search and Filter Inputs */}
-          <div className="w-full"></div>
 
           {/* Targets */}
           <div className="w-full px-2 flex gap-3 mt-1 pb-5 h-max overflow-x-auto scroll-smooth">
@@ -79,6 +102,20 @@ const Board = () => {
               })
             )}
           </div>
+
+          <Modal
+            title="ایجاد تارگت"
+            onCloseESC={() => setCreateTarget(false)}
+            onCloseButton={() => setCreateTarget(false)}
+            modalState={createTarget}
+            modalStateSetter={setCreateTarget}
+            onSubmit={() => console.log("first")}
+            size="w-3/5"
+          >
+            <>
+              <FormikTextInput name="title" formik={createTargetFormik} />
+            </>
+          </Modal>
 
           {/* edit modal */}
           <Modal
@@ -223,7 +260,7 @@ const Board = () => {
           </Modal>
         </div>
       )}
-    </>
+    </motion.div>
   );
 };
 

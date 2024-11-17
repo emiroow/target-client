@@ -4,6 +4,7 @@ import FormikSelectInput from "@/components/common/FormikSelectInput";
 import FormikTextInput from "@/components/common/FormikTextInput";
 import Modal from "@/components/common/Modal";
 import { apiService } from "@/service/axiosService";
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { MdClose } from "react-icons/md";
 import { RiImageAddLine } from "react-icons/ri";
@@ -30,7 +31,15 @@ const Boards = () => {
   } = useBoards();
   const [uploadLoader, setLoader] = useState(false);
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0, scale: 1 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{
+        duration: 0.8,
+        delay: 0.1,
+        ease: [0, 0.71, 0.2, 1.01],
+      }}
+    >
       <div className="gap-3 grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 flex-wrap transition-all duration-300 delay-700 transform-gpu">
         {isLoading ? (
           <>
@@ -293,7 +302,7 @@ const Boards = () => {
       </Modal>
 
       {/* delete Board  */}
-    </>
+    </motion.div>
   );
 };
 

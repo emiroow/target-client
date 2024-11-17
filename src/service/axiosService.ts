@@ -49,7 +49,7 @@ export const apiService = async <T>({
       }
       // net Error
       if (error.code === "ERR_NETWORK") {
-        toast.error(error.message);
+        toast.error("خطای ارتباط با سرور");
       }
       return Promise.reject(error.response?.data);
     }

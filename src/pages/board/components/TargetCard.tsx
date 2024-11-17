@@ -1,4 +1,5 @@
 import { ITargetResponse } from "@/interfaces/response/ITarget";
+import { convertPersianDate } from "@/utils/common/date";
 import {
   targetDifficultyDecider,
   targetStatusDecider,
@@ -82,8 +83,11 @@ const TargetCard: FC<Props> = ({ data }) => {
           </div>
         </div>
 
-        {/* status */}
-        <div className="w-full flex justify-end items-center mt-4">
+        {/* date & status */}
+        <div className="w-full flex items-center justify-between mt-4">
+          <span className="font-sansLight text-sm">
+            {convertPersianDate(data.createdAt || "")}
+          </span>
           <div className="badge badge-warning p-3 text-[12px] gap-1 shadow-md drop-shadow-md">
             <IoTimeOutline />
             {targetStatusDecider(data.status)}

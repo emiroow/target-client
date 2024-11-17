@@ -12,8 +12,8 @@ export interface ITargetResponse {
   status?: string;
   difficulty?: string;
   __v?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Board {
@@ -23,7 +23,7 @@ export interface Board {
   name?: string;
   date?: Date;
   user?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: string;
+  updatedAt?: string;
   __v?: number;
 }

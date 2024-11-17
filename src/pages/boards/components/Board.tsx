@@ -1,5 +1,5 @@
 import { IBoardResponse } from "@/interfaces/response/IBoard";
-import * as moment from "jalali-moment";
+import { convertPersianDate } from "@/utils/common/date";
 import { FC } from "react";
 import {
   BsFillPencilFill,
@@ -69,10 +69,7 @@ const Board: FC<{
         </div>
         <div className="w-full text-left">
           <span className="font-sansLight text-sm">
-            {moment
-              .from(data?.date || "", "YYYY/MM/DD")
-              .locale("fa")
-              .format("YYYY/MM/DD")}
+            {convertPersianDate(data?.date || "")}
           </span>
         </div>
       </div>

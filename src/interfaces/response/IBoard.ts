@@ -9,8 +9,8 @@ export interface BoardList {
   name?: string;
   date?: string;
   user?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: string;
+  updatedAt?: string;
   totalTargets?: number;
   __v?: number;
 }

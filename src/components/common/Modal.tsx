@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "framer-motion";
 import React, { FC } from "react";
 import { MdClose } from "react-icons/md";
 
@@ -45,9 +46,14 @@ const Modal: FC<Props> = ({
     document.body.style.overflow = "auto";
   }
   return (
-    <>
+    <AnimatePresence>
       {modalState && (
-        <>
+        <motion.div
+          initial={{ opacity: 0, scale: 1 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 1 }}
+          transition={{ duration: 0.4, delay: 0.1, ease: [0, 0.71, 0.2, 1.01] }}
+        >
           {/* container */}
           <div className="w-full h-[100vh] overflow-x-hidden overflow-y-auto fixed justify-center items-center content-center inset-0 z-30 outline-none focus:outline-none bg-black/40 top-0 left-0">
             {/* box */}
@@ -75,7 +81,7 @@ const Modal: FC<Props> = ({
                   {onCloseESC && (
                     <button
                       onClick={() => {
-                        modalStateSetter({});
+                        modalStateSetter(false);
                         onCloseESC?.();
                       }}
                       className="btn btn-xs btn-circle btn-outline btn-error"
@@ -148,7 +154,7 @@ const Modal: FC<Props> = ({
                   {onCloseButton && (
                     <button
                       onClick={() => {
-                        modalStateSetter({});
+                        modalStateSetter(false);
                         onCloseButton?.();
                       }}
                       className="btn btn-secondary btn-sm text-white"
@@ -162,15 +168,15 @@ const Modal: FC<Props> = ({
             {/* back Drop */}
             <div
               onClick={() => {
-                modalStateSetter({});
+                modalStateSetter(false);
                 onCloseBackDrop?.();
               }}
               className=" w-full h-full fixed top-0 -z-40"
             ></div>
           </div>
-        </>
+        </motion.div>
       )}
-    </>
+    </AnimatePresence>
   );
 };
 
