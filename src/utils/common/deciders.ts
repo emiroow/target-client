@@ -1,4 +1,4 @@
-import { DIFFICULTY_STATUS, TARGET_STATUS } from "@/interfaces/enums";
+import { DIFFICULTY_STATUS, TARGET_STATUS } from "@/constant/enums";
 
 export const targetStatusDecider = (status?: string) => {
   switch (status) {

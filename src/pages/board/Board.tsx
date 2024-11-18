@@ -1,6 +1,7 @@
 import FormikDatePickerInput from "@/components/common/FormikDatePickerInput";
 import FormikError from "@/components/common/FormikError";
 import FormikSelectInput from "@/components/common/FormikSelectInput";
+import FormikTextArea from "@/components/common/FormikTextArea";
 import FormikTextInput from "@/components/common/FormikTextInput";
 import Modal from "@/components/common/Modal";
 import { apiService } from "@/service/axiosService";
@@ -32,6 +33,8 @@ const Board = () => {
     createTarget,
     setCreateTarget,
     createTargetFormik,
+    difficultyOptionInputArray,
+    createTargetServiceMutation,
   } = useBoard();
 
   return (
@@ -109,12 +112,41 @@ const Board = () => {
             onCloseButton={() => setCreateTarget(false)}
             modalState={createTarget}
             modalStateSetter={setCreateTarget}
-            onSubmit={() => console.log("first")}
-            size="w-3/5"
+            onSubmit={() => createTargetFormik.handleSubmit()}
+            submitLoading={createTargetServiceMutation.isPending}
+            size="w-2/5"
           >
-            <>
-              <FormikTextInput name="title" formik={createTargetFormik} />
-            </>
+            <div className="flex gap-2 flex-col px-2">
+              <FormikTextInput
+                name="title"
+                formik={createTargetFormik}
+                label="نام"
+              />
+              <FormikTextInput
+                name="subTitle"
+                formik={createTargetFormik}
+                label="عنوان"
+              />
+
+              <FormikTextInput
+                formik={createTargetFormik}
+                name="emoji"
+                label="اموجی"
+              />
+              <FormikSelectInput
+                formik={createTargetFormik}
+                name="difficulty"
+                label="سطح"
+                options={difficultyOptionInputArray}
+                placeholder="سطح مورد نظر خودرا وارد کنید"
+                required
+              />
+              <FormikTextArea
+                name="description"
+                formik={createTargetFormik}
+                label="توضیحات"
+              />
+            </div>
           </Modal>
 
           {/* edit modal */}

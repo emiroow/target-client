@@ -5,22 +5,53 @@ import {
   targetStatusDecider,
 } from "@/utils/common/deciders";
 import { FC } from "react";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import {
+  BsFillPencilFill,
+  BsFillTrashFill,
+  BsThreeDotsVertical,
+} from "react-icons/bs";
 import { FaListUl, FaTasks } from "react-icons/fa";
 import { IoTimeOutline } from "react-icons/io5";
 import { PiListMagnifyingGlassBold } from "react-icons/pi";
 interface Props {
   data: ITargetResponse;
+  editBoard?: () => void;
+  deleteBoard?: () => void;
 }
 
-const TargetCard: FC<Props> = ({ data }) => {
+const TargetCard: FC<Props> = ({ data, editBoard, deleteBoard }) => {
   return (
     <div className="flex-shrink-0 2xl:w-[20%] h-max xl:w-[30%] lg:w-[30%] md:w-[35%] sm:w-[40%] w-[95%]">
       <div className="flex justify-between ps-4 mb-1 items-center">
         <span className="font-sansBold">{data.title}</span>
-        <button className="btn btn-ghost btn-sm btn-square text-primary">
-          <BsThreeDotsVertical className="text-lg" />
-        </button>
+        <div className="dropdown z-50">
+          <button
+            tabIndex={0}
+            className="btn btn-ghost btn-sm btn-square text-primary"
+          >
+            <BsThreeDotsVertical className="text-lg" />
+          </button>
+          <ul className="menu dropdown-content bg-base-200 rounded-lg -m-[10px] mt-1 gap-3 p-1.5">
+            <li>
+              <button
+                onClick={() => editBoard?.()}
+                className="menu-dropdown-toggle tooltip tooltip-right p-0"
+                data-tip="ویرایش"
+              >
+                <BsFillPencilFill className="p-[8px] text-3xl text-green-500" />
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => deleteBoard?.()}
+                className="tooltip tooltip-right p-0"
+                data-tip="حذف"
+              >
+                <BsFillTrashFill className="p-[8px] text-3xl text-red-500" />
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
       <div className="cursor-pointer rounded-lg bg-neutral p-3 shadow-lg drop-shadow-2xl shadow-primary/15 border border-primary/5 transition-all delay-100 duration-700 hover:shadow-primary/50">
         <div className="w-full flex justify-between items-center">

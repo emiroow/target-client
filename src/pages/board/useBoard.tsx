@@ -1,7 +1,8 @@
-import { DIFFICULTY_STATUS } from "@/interfaces/enums";
+import { DIFFICULTY_STATUS } from "@/constant/enums";
 import { BoardList } from "@/interfaces/response/IBoard";
 import { ITargetResponse } from "@/interfaces/response/ITarget";
 import { apiService } from "@/service/axiosService";
+import { targetDifficultyDecider } from "@/utils/common/deciders";
 import { validateSchema } from "@/utils/common/joiValidator";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useFormik } from "formik";
@@ -89,15 +90,21 @@ const useBoard = () => {
       "string.empty": "توضیحات نباید خالی باشد",
       "any.required": "توضیحات الزامی است",
     }),
-    emoji: Joi.string().required().messages({
-      "string.empty": "اموجی نباید خالی باشد",
-      "any.required": "اموجی الزامی است",
-    }),
+    emoji: Joi.string()
+      .pattern(/^\p{Emoji}$/u)
+      .required()
+      .messages({
+        "any.required": "اموجی فیلد اجباری می باشد",
+        "string.empty": "اموجی فیلد اجباری می باشد",
+        "string.pattern.base": "فقط اموجی میتوانید استفاده کنید",
+        // "string.max": "فقط یک اموجی میتوانید وارد کنید",
+      }),
     difficulty: Joi.string()
       .valid(...difficultyValues)
       .required()
       .messages({
-        "any.only": `سطح سختی باید یکی از مقادیر ${difficultyValues.join(
+        "string.empty": "سطح نباید خالی باشد",
+        "any.only": `سطح باید یکی از مقادیر ${difficultyValues.join(
           ", "
         )} باشد`,
 
@@ -131,7 +138,27 @@ const useBoard = () => {
     },
     validate: (value) => validateSchema(createTargetSchema, value),
     onSubmit: (data) => {
-      console.log(data);
+      createTargetServiceMutation.mutate(data);
+    },
+  });
+
+  const editTargetFormik = useFormik<{
+    title?: string;
+    subTitle?: string;
+    description?: string;
+    emoji?: string;
+    difficulty?: string;
+  }>({
+    initialValues: {
+      description: "",
+      difficulty: "",
+      emoji: "",
+      subTitle: "",
+      title: "",
+    },
+    validate: (value) => validateSchema(createTargetSchema, value),
+    onSubmit: (data) => {
+      // createTargetServiceMutation.mutate(data);
     },
   });
 
@@ -199,6 +226,31 @@ const useBoard = () => {
     refetchOnMount: true,
   });
 
+  const createTargetService = async (body: object) => {
+    const data = await apiService({
+      path: "target/create",
+      method: "POST",
+      Option: { data: body, params: { board: id } },
+    });
+    return data;
+  };
+
+  const createTargetServiceMutation = useMutation({
+    mutationFn: createTargetService,
+    onSuccess: (data) => {
+      console.log(data);
+      createTargetFormik.resetForm();
+      queryClient.fetchQuery({ queryKey: ["GET_TARGETS"] });
+      setCreateTarget(false);
+    },
+  });
+
+  const difficultyOptionInputArray = Object.values(DIFFICULTY_STATUS).map(
+    (item): any => {
+      return { label: targetDifficultyDecider(item), value: item };
+    }
+  );
+
   return {
     targets,
     targetsIsLoading,
@@ -215,6 +267,8 @@ const useBoard = () => {
     createTarget,
     setCreateTarget,
     createTargetFormik,
+    difficultyOptionInputArray,
+    createTargetServiceMutation,
   };
 };
 
