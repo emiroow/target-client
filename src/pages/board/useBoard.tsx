@@ -15,7 +15,13 @@ const useBoard = () => {
   const { id } = useParams();
   const queryClient = useQueryClient();
   const [uploadLoader, setLoader] = useState(false);
-
+  const [editTargetModal, setEditTargetModal] = useState<{
+    isOpen: boolean;
+    targetId?: string;
+  }>({
+    isOpen: false,
+    targetId: "",
+  });
   const [editBoardModal, setBoardEditModal] = useState({
     boardId: id,
     boardState: false,
@@ -158,7 +164,7 @@ const useBoard = () => {
     },
     validate: (value) => validateSchema(createTargetSchema, value),
     onSubmit: (data) => {
-      // createTargetServiceMutation.mutate(data);
+      updateTargetMutating.mutate({ body: data, id: editTargetModal.targetId });
     },
   });
 
@@ -210,6 +216,46 @@ const useBoard = () => {
       if (response.status) {
         toast.success(response.massage);
       }
+    },
+  });
+
+  const updateTarget = async (queryData: { id?: string; body?: any }) => {
+    const data = apiService<any>({
+      method: "PUT",
+      path: `target/update/${queryData.id}`,
+      Option: { data: queryData.body },
+    });
+    return data;
+  };
+  const updateTargetMutating = useMutation({
+    mutationFn: updateTarget,
+    onSuccess: (response) => {
+      editTargetFormik.resetForm();
+      queryClient.fetchQuery({ queryKey: ["GET_TARGETS"] });
+      setEditTargetModal({ isOpen: false, targetId: "" });
+      if (response.status) {
+        toast.success(response.massage);
+      }
+    },
+  });
+
+  const getTargetInfo = async (board?: string) => {
+    const data = apiService<ITargetResponse>({
+      method: "GET",
+      path: `target/info/${board}`,
+    });
+    return data;
+  };
+  const targetInfoMutating = useMutation({
+    mutationFn: getTargetInfo,
+    onSuccess: (response) => {
+      editTargetFormik.setValues({
+        description: response.data?.description,
+        difficulty: response.data?.difficulty,
+        emoji: response.data?.emoji,
+        subTitle: response.data?.subTitle,
+        title: response.data?.title,
+      });
     },
   });
 
@@ -269,6 +315,11 @@ const useBoard = () => {
     createTargetFormik,
     difficultyOptionInputArray,
     createTargetServiceMutation,
+    editTargetModal,
+    setEditTargetModal,
+    editTargetFormik,
+    updateTargetMutating,
+    targetInfoMutating,
   };
 };
 

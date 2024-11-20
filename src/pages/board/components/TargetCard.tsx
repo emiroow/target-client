@@ -24,7 +24,7 @@ const TargetCard: FC<Props> = ({ data, editBoard, deleteBoard }) => {
     <div className="flex-shrink-0 2xl:w-[20%] h-max xl:w-[30%] lg:w-[30%] md:w-[35%] sm:w-[40%] w-[95%]">
       <div className="flex justify-between ps-4 mb-1 items-center">
         <span className="font-sansBold">{data.title}</span>
-        <div className="dropdown z-50">
+        <div className="dropdown z-10">
           <button
             tabIndex={0}
             className="btn btn-ghost btn-sm btn-square text-primary"

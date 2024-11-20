@@ -35,6 +35,11 @@ const Board = () => {
     createTargetFormik,
     difficultyOptionInputArray,
     createTargetServiceMutation,
+    editTargetModal,
+    setEditTargetModal,
+    editTargetFormik,
+    targetInfoMutating,
+    updateTargetMutating,
   } = useBoard();
 
   return (
@@ -101,11 +106,64 @@ const Board = () => {
               </>
             ) : (
               targets?.data?.map((item, index: number) => {
-                return <TargetCard data={item} key={index} />;
+                return (
+                  <TargetCard
+                    editBoard={() => {
+                      setEditTargetModal({ isOpen: true, targetId: item._id });
+                      targetInfoMutating.mutate(item._id);
+                    }}
+                    data={item}
+                    key={index}
+                  />
+                );
               })
             )}
           </div>
+          <Modal
+            title="ویرایش تارگت"
+            onCloseESC={() => setCreateTarget(false)}
+            onCloseButton={() => setCreateTarget(false)}
+            modalState={editTargetModal.isOpen}
+            modalStateSetter={setEditTargetModal}
+            onSubmit={() => editTargetFormik.handleSubmit()}
+            submitLoading={updateTargetMutating.isPending}
+            loading={targetInfoMutating.isPending}
+            size="w-2/5"
+          >
+            <div className="flex gap-2 flex-col px-2">
+              <FormikTextInput
+                name="title"
+                formik={editTargetFormik}
+                label="نام"
+              />
+              <FormikTextInput
+                name="subTitle"
+                formik={editTargetFormik}
+                label="عنوان"
+              />
 
+              <FormikTextInput
+                formik={editTargetFormik}
+                name="emoji"
+                label="اموجی"
+              />
+              <FormikSelectInput
+                formik={editTargetFormik}
+                name="difficulty"
+                label="سطح"
+                options={difficultyOptionInputArray}
+                placeholder="سطح مورد نظر خودرا وارد کنید"
+                required
+              />
+              <FormikTextArea
+                name="description"
+                formik={editTargetFormik}
+                label="توضیحات"
+              />
+            </div>
+          </Modal>
+
+          {/* create Target Modal */}
           <Modal
             title="ایجاد تارگت"
             onCloseESC={() => setCreateTarget(false)}
@@ -149,7 +207,7 @@ const Board = () => {
             </div>
           </Modal>
 
-          {/* edit modal */}
+          {/* edit Board Modal */}
           <Modal
             title={`ویرایش بورد ${boardInfo?.data?.name}`}
             modalState={editBoardModal.boardState}
