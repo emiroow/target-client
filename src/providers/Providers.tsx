@@ -4,7 +4,11 @@ import "react-toastify/dist/ReactToastify.css";
 import Loading from "../components/templates/components/Loading";
 
 const Providers = ({ children }: { children: React.ReactElement }) => {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false, refetchOnWindowFocus: false },
+    },
+  });
 
   return (
     <Suspense fallback={<Loading />}>

@@ -49,6 +49,8 @@ export const apiService = async <T>({
       }
       // net Error
       if (error.code === "ERR_NETWORK") {
+        localStorage.removeItem("TodoApp");
+        window.location.href = "/auth/login";
         toast.error("خطای ارتباط با سرور");
       }
       return Promise.reject(error.response?.data);
