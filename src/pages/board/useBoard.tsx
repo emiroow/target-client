@@ -13,8 +13,11 @@ import { toast } from "react-toastify";
 
 const useBoard = () => {
   const { id } = useParams();
+
   const queryClient = useQueryClient();
+
   const [uploadLoader, setLoader] = useState(false);
+
   const [editTargetModal, setEditTargetModal] = useState<{
     isOpen: boolean;
     targetId?: string;
@@ -22,6 +25,15 @@ const useBoard = () => {
     isOpen: false,
     targetId: "",
   });
+
+  const [deleteTargetModal, setDeleteTargetModal] = useState<{
+    isOpen: boolean;
+    targetId?: string;
+  }>({
+    isOpen: false,
+    targetId: "",
+  });
+
   const [editBoardModal, setBoardEditModal] = useState({
     boardId: id,
     boardState: false,
@@ -259,6 +271,27 @@ const useBoard = () => {
     },
   });
 
+  const deleteTarget = async (id?: string) => {
+    const data = apiService<any>({
+      method: "DELETE",
+      path: `target/delete/${id}`,
+    });
+    return data;
+  };
+  const deleteTargetMutating = useMutation({
+    mutationFn: deleteTarget,
+    onSuccess: (response) => {
+      queryClient.fetchQuery({ queryKey: ["GET_TARGETS"] });
+      setDeleteTargetModal({
+        isOpen: false,
+        targetId: "",
+      });
+      if (response.status) {
+        toast.success(response.massage);
+      }
+    },
+  });
+
   const getUploadList = async () => {
     const data = await apiService<any>({
       path: "upload/list",
@@ -269,6 +302,7 @@ const useBoard = () => {
   const { data: uploads } = useQuery({
     queryKey: ["GET_UPLOADS", setBoardEditModal],
     queryFn: getUploadList,
+    enabled: editTargetModal.isOpen,
     refetchOnMount: true,
   });
 
@@ -280,14 +314,15 @@ const useBoard = () => {
     });
     return data;
   };
-
   const createTargetServiceMutation = useMutation({
     mutationFn: createTargetService,
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: (response) => {
       createTargetFormik.resetForm();
       queryClient.fetchQuery({ queryKey: ["GET_TARGETS"] });
       setCreateTarget(false);
+      if (response.status) {
+        toast.success(response.massage);
+      }
     },
   });
 
@@ -320,6 +355,9 @@ const useBoard = () => {
     editTargetFormik,
     updateTargetMutating,
     targetInfoMutating,
+    deleteTargetModal,
+    setDeleteTargetModal,
+    deleteTargetMutating,
   };
 };
 

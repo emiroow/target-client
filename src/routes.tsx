@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import AuthTemplate from "./components/templates/AuthTemplate";
 import FullTemplate from "./components/templates/FullTemplate";
 const Board = lazy(() => import("./pages/board/Board"));
+const Todo = lazy(() => import("./pages/todo/Todo"));
 const Boards = lazy(() => import("./pages/boards/Boards"));
 const Login = lazy(() => import("./pages/auth/Login"));
 const SignUp = lazy(() => import("./pages/auth/SignUp"));
@@ -15,6 +16,7 @@ export const router = createBrowserRouter([
     children: [
       { path: "/board/:id", element: <Board /> },
       { path: "/boards", element: <Boards /> },
+      { path: "/target/:id", element: <Todo /> },
     ],
   },
   {

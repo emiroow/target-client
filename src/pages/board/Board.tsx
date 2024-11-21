@@ -40,6 +40,9 @@ const Board = () => {
     editTargetFormik,
     targetInfoMutating,
     updateTargetMutating,
+    deleteTargetModal,
+    setDeleteTargetModal,
+    deleteTargetMutating,
   } = useBoard();
 
   return (
@@ -109,8 +112,15 @@ const Board = () => {
                 return (
                   <TargetCard
                     editBoard={() => {
-                      setEditTargetModal({ isOpen: true, targetId: item._id });
                       targetInfoMutating.mutate(item._id);
+                      setEditTargetModal({ isOpen: true, targetId: item._id });
+                    }}
+                    deleteBoard={() => {
+                      targetInfoMutating.mutate(item._id);
+                      setDeleteTargetModal({
+                        isOpen: true,
+                        targetId: item._id,
+                      });
                     }}
                     data={item}
                     key={index}
@@ -119,6 +129,39 @@ const Board = () => {
               })
             )}
           </div>
+
+          {/* delete Target Modal */}
+          <Modal
+            title="ویرایش تارگت"
+            onCloseESC={() => setCreateTarget(false)}
+            onCloseButton={() => setCreateTarget(false)}
+            modalState={deleteTargetModal.isOpen}
+            modalStateSetter={setDeleteTargetModal}
+            onSubmit={() =>
+              deleteTargetMutating.mutate(deleteTargetModal.targetId)
+            }
+            submitLoading={deleteTargetMutating.isPending}
+            loading={targetInfoMutating.isPending}
+            size="w-2/5"
+          >
+            <>
+              {targetInfoMutating.isPending ? (
+                <div className="w-full flex justify-center items-center p-24">
+                  <span className="loading loading-spinner loading-md text-white"></span>
+                </div>
+              ) : (
+                <div className="text-center mt-10 text-xl mb-5">
+                  <span> آیا از خذف بورد </span>
+                  <span className="text-secondary font-bold">
+                    {targetInfoMutating.data?.data?.title}
+                  </span>
+                  <span> مطمئن هستید ؟</span>
+                </div>
+              )}
+            </>
+          </Modal>
+
+          {/* Edit Target Modal*/}
           <Modal
             title="ویرایش تارگت"
             onCloseESC={() => setCreateTarget(false)}
