@@ -21,7 +21,7 @@ const Todo = () => {
           <TodoInfoBox />
 
           {/* Search & Filter Box */}
-          <div className=" w-[95%] md:w-[60%] lg:w-[50%] 2xl:w-[30%] m-auto flex flex-row justify-between">
+          {/* <div className=" w-[95%] md:w-[60%] lg:w-[50%] 2xl:w-[30%] m-auto flex flex-row justify-between">
             <label className="input max-sm:input-sm input-bordered flex items-center input-secondary">
               <input type="text" className="grow" placeholder="Search" />
               <svg
@@ -39,14 +39,14 @@ const Todo = () => {
             </label>
             <select className="select max-sm:select-sm select-bordered select-secondary">
               <option disabled selected>
-                Filter
+                
               </option>
               <option>Game of Thrones</option>
               <option>Lost</option>
               <option>Breaking Bad</option>
               <option>Walking Dead</option>
             </select>
-          </div>
+          </div> */}
 
           {/* Add Box */}
           <AddTodo />
