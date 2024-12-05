@@ -1,10 +1,4 @@
-import { useFormik } from "formik";
-
 const Navbar = () => {
-  const formik = useFormik({
-    initialValues: {},
-    onSubmit: () => {},
-  });
   return (
     <div
       className={`w-full h-[7vh] drop-shadow-2xl shadow-2xl border-b px-5 border-gray-800 flex justify-between items-center self-center`}

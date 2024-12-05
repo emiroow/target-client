@@ -95,7 +95,7 @@ const Login = () => {
         />
         <button
           type="submit"
-          className="btn btn-secondary max-lg:btn-sm text-md btn"
+          className="btn btn-secondary text-md"
           disabled={loginMutation.isPending}
         >
           {loginMutation.isPending ? (

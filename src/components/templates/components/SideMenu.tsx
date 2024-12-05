@@ -7,7 +7,7 @@ import {
   RiMenu3Fill,
   RiTimerFlashLine,
 } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const SideMenu = () => {
   const { setAsideMenuStatus, settings } = useSetting();
@@ -47,10 +47,13 @@ const SideMenu = () => {
       >
         <ul className="w-full menu menu-lg rounded-box mt-4 h-[85vh] overflow-y-auto gap-2">
           <li className="hover:text-secondary">
-            <Link to={"/"}>
+            <NavLink
+              className={({ isActive }) => (isActive ? "text-secondary" : "")}
+              to={"/"}
+            >
               <RiDashboard2Line className="text-2xl" />
               <span>داشبورد</span>
-            </Link>
+            </NavLink>
           </li>
           <li>
             <details open>
@@ -69,22 +72,31 @@ const SideMenu = () => {
             </details>
           </li>
           <li className="hover:text-secondary">
-            <Link to={"/boards"}>
+            <NavLink
+              className={({ isActive }) => (isActive ? "text-secondary" : "")}
+              to={"/boards"}
+            >
               <MdDashboard className="text-2xl" />
               <span>بورد های من</span>
-            </Link>
+            </NavLink>
           </li>
           <li className="hover:text-secondary">
-            <span>
+            <NavLink
+              className={({ isActive }) => (isActive ? "text-secondary" : "")}
+              to={"/dailyPlanner"}
+            >
               <MdCalendarToday className="text-2xl" />
               <span>برنامه ی روزانه</span>
-            </span>
+            </NavLink>
           </li>
           <li className="hover:text-secondary">
-            <span>
+            <NavLink
+              className={({ isActive }) => (isActive ? "text-secondary" : "")}
+              to={"/timeLine"}
+            >
               <RiTimerFlashLine className="text-2xl" />
               <span>تایمر</span>
-            </span>
+            </NavLink>
           </li>
         </ul>
         {sideMenuIsOpen && (
@@ -103,30 +115,46 @@ const SideMenu = () => {
       {!sideMenuIsOpen && (
         <>
           <div className="w-full h-[84vh]  duration-300 transition-opacity flex flex-col justify-start mt-5 gap-4">
-            <Link
+            <NavLink
               to={"/"}
-              className="transition-all hover:bg-secondary/50 w-[85%] flex justify-end p-3 rounded-e-xl"
+              className={({ isActive }) =>
+                isActive
+                  ? "ransition-all bg-secondary/50 w-[85%] flex justify-end p-3 rounded-e-xl"
+                  : `transition-all hover:bg-secondary/50 w-[85%] flex justify-end p-3 rounded-e-xl`
+              }
             >
               <RiDashboard2Line className="text-3xl" />
-            </Link>
-            <Link
+            </NavLink>
+            <NavLink
               to={"/boards"}
-              className="transition-all hover:bg-secondary/50 w-[85%] flex justify-end p-3 rounded-e-xl"
+              className={({ isActive }) =>
+                isActive
+                  ? "ransition-all bg-secondary/50 w-[85%] flex justify-end p-3 rounded-e-xl"
+                  : `transition-all hover:bg-secondary/50 w-[85%] flex justify-end p-3 rounded-e-xl`
+              }
             >
               <MdDashboard className="text-3xl" />
-            </Link>
-            <Link
-              to={""}
-              className="transition-all hover:bg-secondary/50 w-[85%] flex justify-end p-3 rounded-e-xl"
+            </NavLink>
+            <NavLink
+              className={({ isActive }) =>
+                isActive
+                  ? "ransition-all bg-secondary/50 w-[85%] flex justify-end p-3 rounded-e-xl"
+                  : `transition-all hover:bg-secondary/50 w-[85%] flex justify-end p-3 rounded-e-xl`
+              }
+              to={"/dailyPlanner"}
             >
               <MdCalendarToday className="text-3xl" />
-            </Link>
-            <Link
-              to={""}
-              className="transition-all hover:bg-secondary/50 w-[85%] flex justify-end p-3 rounded-e-xl"
+            </NavLink>
+            <NavLink
+              className={({ isActive }) =>
+                isActive
+                  ? "ransition-all bg-secondary/50 w-[85%] flex justify-end p-3 rounded-e-xl"
+                  : `transition-all hover:bg-secondary/50 w-[85%] flex justify-end p-3 rounded-e-xl`
+              }
+              to={"/timeLine"}
             >
               <RiTimerFlashLine className="text-3xl" />
-            </Link>
+            </NavLink>
           </div>
           <div onClick={() => logOut()} className="w-full cursor-pointer">
             <IoLogOutOutline className="text-3xl h-[6.5vh] hover:text-secondary transition-all flex justify-center items-center self-center m-auto" />

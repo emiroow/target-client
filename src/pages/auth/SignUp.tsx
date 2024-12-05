@@ -125,10 +125,7 @@ const SignUp = () => {
           type="password"
           innerIcon={{ icon: <FaKey />, position: "left" }}
         />
-        <button
-          type="submit"
-          className="btn btn-secondary max-lg:btn-sm text-md text-white"
-        >
+        <button type="submit" className="btn btn-secondary text-md text-white">
           {signUpMutation.isPending ? (
             <span className="loading loading-spinner loading-md text-white"></span>
           ) : (

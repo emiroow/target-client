@@ -1,3 +1,5 @@
+import { ITaskResponse } from "@/interfaces/response/ITask";
+import { convertPersianDate } from "@/utils/common/date";
 import { FC } from "react";
 import {
   BsEye,
@@ -7,12 +9,12 @@ import {
 } from "react-icons/bs";
 
 interface Props {
-  data?: any;
+  data?: ITaskResponse;
   editBoard?: () => void;
   deleteBoard?: () => void;
 }
 
-const TodoItem: FC<Props> = ({ deleteBoard, editBoard }) => {
+const TaskItem: FC<Props> = ({ deleteBoard, editBoard, data }) => {
   return (
     <div className="w-full border p-5 rounded flex flex-row item-center justify-between">
       <div className="flex flex-row self-center item-center gap-3">
@@ -20,22 +22,31 @@ const TodoItem: FC<Props> = ({ deleteBoard, editBoard }) => {
         <input
           type="checkbox"
           className="checkbox checkbox-sm mt-1 checkbox-secondary"
+          id={data?._id}
+          defaultChecked={data?.checked}
+          onChange={(e) => {
+            console.log(e.target.checked);
+          }}
         />
         {/* todo title */}
-        <span className=" font-light">عنوان تستی</span>
+        <label htmlFor={data?._id} className=" font-light cursor-pointer">
+          {data?.title}
+        </label>
       </div>
-      <div className="flex flex-row item-center gap-3 items-center">
+      <div className={`flex flex-row item-center gap-3 items-center`}>
         {/* time */}
-        <span className="font-medium">08:35</span>
+        <span className="font-medium">
+          {convertPersianDate(data?.createdAt || "")}
+        </span>
         {/* action btn s */}
-        <div className="dropdown z-10">
+        <div className="dropdown">
           <button
             tabIndex={0}
-            className="btn btn-ghost btn-sm btn-square text-secondary"
+            className="btn btn-ghost btn-sm btn-square text-secondary z-0"
           >
             <BsThreeDotsVertical className="text-lg" />
           </button>
-          <ul className="menu dropdown-content bg-base-200 rounded-lg -m-[10px] mt-1 gap-3 p-1.5">
+          <ul className="menu dropdown-content bg-base-200 rounded-lg -m-[8px] mt-1 gap-3 z-50">
             <li>
               <button className="tooltip tooltip-right p-0" data-tip="جزئیات">
                 <BsEye className="p-[8px] text-3xl text-info" />
@@ -66,4 +77,4 @@ const TodoItem: FC<Props> = ({ deleteBoard, editBoard }) => {
   );
 };
 
-export default TodoItem;
+export default TaskItem;

@@ -50,7 +50,7 @@ const FormikTextInput: FC<Props> = ({
         </span>
       )}
       <label
-        className={`input max-sm:input-sm input-secondary input-bordered flex items-center gap-2 ${className}`}
+        className={`input input-secondary input-bordered flex items-center gap-2 ${className}`}
       >
         {/* inner btn  pos left*/}
         {innerButton && innerButton.position === "left" && (

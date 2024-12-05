@@ -37,7 +37,7 @@ const Board: FC<{
           </li>
           <li>
             <button
-              onClick={async (e) => {
+              onClick={async () => {
                 deleteBoard?.();
               }}
               className="tooltip tooltip-right p-0"

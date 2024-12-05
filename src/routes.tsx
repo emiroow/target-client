@@ -3,7 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import AuthTemplate from "./components/templates/AuthTemplate";
 import FullTemplate from "./components/templates/FullTemplate";
 const Board = lazy(() => import("./pages/board/Board"));
-const Todo = lazy(() => import("./pages/todo/Todo"));
+const Todo = lazy(() => import("./pages/todo/Task"));
 const Boards = lazy(() => import("./pages/boards/Boards"));
 const Login = lazy(() => import("./pages/auth/Login"));
 const SignUp = lazy(() => import("./pages/auth/SignUp"));
