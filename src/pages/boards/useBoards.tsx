@@ -116,7 +116,7 @@ const useBoards = () => {
   });
 
   const getBoardInfo = async (board?: string) => {
-    const data = apiService<BoardList>({
+    const data = await apiService<BoardList>({
       method: "GET",
       path: "board/info",
       Option: { params: { board } },

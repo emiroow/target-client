@@ -1,3 +1,4 @@
+import { TARGET_STATUS } from "@/constant/enums";
 import { ITargetResponse } from "@/interfaces/response/ITarget";
 import { convertPersianDate } from "@/utils/common/date";
 import {
@@ -10,7 +11,7 @@ import {
   BsFillTrashFill,
   BsThreeDotsVertical,
 } from "react-icons/bs";
-import { FaListUl, FaTasks } from "react-icons/fa";
+import { FaCheck, FaListUl, FaTasks } from "react-icons/fa";
 import { IoTimeOutline } from "react-icons/io5";
 import { PiListMagnifyingGlassBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
@@ -121,9 +122,19 @@ const TargetCard: FC<Props> = ({ data, editBoard, deleteBoard }) => {
             <span className="font-sansLight text-sm">
               {convertPersianDate(data.createdAt || "")}
             </span>
-            <div className="badge badge-warning p-3 text-[12px] gap-1 shadow-md drop-shadow-md">
-              <IoTimeOutline />
-              {targetStatusDecider(data.status)}
+            <div
+              className={`badge ${
+                data?.status === TARGET_STATUS.FINISHED
+                  ? "badge-success "
+                  : "badge-warning"
+              } p-3 text-[12px] text-white gap-1 shadow-md drop-shadow-md`}
+            >
+              {data?.status === TARGET_STATUS.FINISHED ? (
+                <FaCheck />
+              ) : (
+                <IoTimeOutline />
+              )}
+              {targetStatusDecider(data?.status)}
             </div>
           </div>
         </div>

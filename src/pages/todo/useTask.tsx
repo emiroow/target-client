@@ -1,3 +1,4 @@
+import { ITargetResponse } from "@/interfaces/response/ITarget";
 import { ITaskResponse } from "@/interfaces/response/ITask";
 import { apiService } from "@/service/axiosService";
 import { validateSchema } from "@/utils/common/joiValidator";
@@ -52,24 +53,49 @@ const useTask = () => {
     mutationFn: createTask,
     onSuccess: (data) => {
       toast.success(data.massage);
-      queryClient.fetchQuery({ queryKey: ["get_tasks"] });
+      queryClient.fetchQuery({
+        queryKey: ["get_tasks"],
+      });
+      queryClient.fetchQuery({
+        queryKey: ["get_target_info"],
+      });
       taskFormik.resetForm();
     },
   });
 
-  const changeTaskStatus = async (checked: boolean) => {
+  const changeTaskStatus = async (checked: {
+    checked: boolean;
+    taskId?: string;
+  }) => {
     const data = await apiService({
-      method: "PATCH",
-      path: "/task/update",
-      Option: { data: { checked } },
+      method: "PUT",
+      path: `/task/update/${checked.taskId}`,
+      Option: { data: { checked: checked.checked } },
     });
     return data;
   };
   const changeTaskStatusMutation = useMutation({
     mutationFn: changeTaskStatus,
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
+      queryClient.fetchQuery({
+        queryKey: ["get_tasks"],
+      });
+      queryClient.fetchQuery({
+        queryKey: ["get_target_info"],
+      });
     },
+  });
+
+  const getBoardInfo = async () => {
+    const data = await apiService<ITargetResponse>({
+      method: "GET",
+      path: `target/info/${targetId}`,
+    });
+    return data;
+  };
+  const { data: getTargetInfo, isPending: getTargetInfoIsPending } = useQuery({
+    queryKey: ["get_target_info"],
+    queryFn: getBoardInfo,
   });
 
   return {
@@ -80,6 +106,8 @@ const useTask = () => {
     getTasksQueryIsLoading,
     changeTaskStatus,
     changeTaskStatusMutation,
+    getTargetInfo,
+    getTargetInfoIsPending,
   };
 };
 

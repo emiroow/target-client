@@ -5,7 +5,10 @@ const AddTask = () => {
   const { taskFormik, createTaskMutation } = useTask();
 
   return (
-    <div className="w-[95%] md:w-[60%] lg:w-[50%] 2xl:w-[30%] m-auto flex flex-row justify-between gap-1">
+    <form
+      onSubmit={taskFormik.handleSubmit}
+      className="w-[95%] md:w-[60%] lg:w-[50%] 2xl:w-[30%] m-auto flex flex-row justify-between gap-1"
+    >
       <FormikTextInput
         name="title"
         placeholder="هدف"
@@ -15,7 +18,7 @@ const AddTask = () => {
       />
       <div className="tooltip" data-tip="ایجاد هدف">
         <button
-          onClick={() => taskFormik.handleSubmit()}
+          type="submit"
           className="btn btn-square btn-active btn-secondary"
         >
           {createTaskMutation.isPending ? (
@@ -25,7 +28,7 @@ const AddTask = () => {
           )}
         </button>
       </div>
-    </div>
+    </form>
   );
 };
 

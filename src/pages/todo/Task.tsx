@@ -1,4 +1,4 @@
-import { Fragment } from "react/jsx-runtime";
+import { AnimatePresence, motion } from "framer-motion";
 import AddTodo from "./components/AddTask";
 import TodoInfoBox from "./components/taskInfoBox";
 import TaskItemSkeleton from "./components/TaskItemSkeleton";
@@ -10,41 +10,51 @@ const Task = () => {
   const { getTasksQueryIsLoading, getTasksQuery } = useTask();
 
   return (
-    <div className="rounded-lg flex flex-col gap-3">
-      {/* container */}
-      <div className="w-full justify-center d-flex mt-5 sm:mt-10">
-        {/* Box,s */}
-        <div className="flex gap-3 flex-col">
-          {/* box info */}
-          <TodoInfoBox />
-          {/* Add Box */}
-          <AddTodo />
-          {/* content box */}
-          <ContentBox>
-            <Fragment>
-              {getTasksQueryIsLoading ? (
-                <>
-                  <TaskItemSkeleton />
-                  <TaskItemSkeleton />
-                  <TaskItemSkeleton />
-                  <TaskItemSkeleton />
-                  <TaskItemSkeleton />
-                  <TaskItemSkeleton />
-                </>
-              ) : getTasksQuery?.data?.length ? (
-                getTasksQuery?.data?.map((item, index) => {
-                  return <TodoItem data={item} key={index} />;
-                })
-              ) : (
-                <div className="w-full border border-secondary text-center flex items-center justify-center rounded p-5 h-[53vh] bg-main/50">
-                  (خالی)
-                </div>
-              )}
-            </Fragment>
-          </ContentBox>
+    <motion.div
+      initial={{ opacity: 0, scale: 1 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{
+        duration: 0.8,
+        delay: 0.1,
+        ease: [0, 0.71, 0.2, 1.01],
+      }}
+    >
+      <div className="rounded-lg flex flex-col gap-3">
+        {/* container */}
+        <div className="w-full justify-center d-flex mt-5 sm:mt-5">
+          {/* Box,s */}
+          <div className="flex gap-3 flex-col">
+            {/* box info */}
+            <TodoInfoBox />
+            {/* Add Box */}
+            <AddTodo />
+            {/* content box */}
+            <ContentBox>
+              <AnimatePresence>
+                {getTasksQueryIsLoading ? (
+                  <>
+                    <TaskItemSkeleton />
+                    <TaskItemSkeleton />
+                    <TaskItemSkeleton />
+                    <TaskItemSkeleton />
+                    <TaskItemSkeleton />
+                    <TaskItemSkeleton />
+                  </>
+                ) : getTasksQuery?.data?.length ? (
+                  getTasksQuery?.data?.map((item, index) => {
+                    return <TodoItem data={item} key={index} />;
+                  })
+                ) : (
+                  <div className="w-full border border-secondary text-center flex items-center justify-center rounded p-5 h-[53vh] bg-main/50">
+                    (خالی)
+                  </div>
+                )}
+              </AnimatePresence>
+            </ContentBox>
+          </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
