@@ -8,7 +8,6 @@ import useTask from "./useTask";
 
 const Task = () => {
   const { getTasksQueryIsLoading, getTasksQuery } = useTask();
-
   return (
     <motion.div
       initial={{ opacity: 0, scale: 1 }}

@@ -1,6 +1,8 @@
 import { IBoardResponse } from "@/interfaces/response/IBoard";
 import { convertPersianDate } from "@/utils/common/date";
+import { motion } from "framer-motion";
 import { FC } from "react";
+
 import {
   BsFillPencilFill,
   BsFillTrashFill,
@@ -15,7 +17,16 @@ const Board: FC<{
   const navigate = useNavigate();
 
   return (
-    <div
+    <motion.div
+      key="loading"
+      initial={{ opacity: 0, scale: 1 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{
+        duration: 0.1,
+        delay: 0.1,
+        ease: [0, 0.71, 0.2, 1.01],
+      }}
       className={`h-max max-sm:w-[100%] 
       relative rounded-xl p-3 bg-center bg-no-repeat overflow-hidden drop-shadow-lg shadow-black/50 shadow-lg hover:cursor-pointer group`}
     >
@@ -79,7 +90,7 @@ const Board: FC<{
           backgroundImage: `url(${data.backgroundImageUrl})`,
         }}
       ></div>
-    </div>
+    </motion.div>
   );
 };
 

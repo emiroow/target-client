@@ -132,7 +132,7 @@ const Board = () => {
 
           {/* delete Target Modal */}
           <Modal
-            title="ویرایش تارگت"
+            title="حذف تارگت"
             onCloseESC={() => setCreateTarget(false)}
             onCloseButton={() => setCreateTarget(false)}
             modalState={deleteTargetModal.isOpen}

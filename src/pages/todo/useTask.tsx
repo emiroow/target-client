@@ -56,7 +56,7 @@ const useTask = () => {
       queryClient.fetchQuery({
         queryKey: ["get_tasks"],
       });
-      queryClient.fetchQuery({
+      queryClient.refetchQueries({
         queryKey: ["get_target_info"],
       });
       taskFormik.resetForm();
@@ -77,25 +77,25 @@ const useTask = () => {
   const changeTaskStatusMutation = useMutation({
     mutationFn: changeTaskStatus,
     onSuccess: () => {
-      queryClient.fetchQuery({
+      queryClient.refetchQueries({
         queryKey: ["get_tasks"],
       });
-      queryClient.fetchQuery({
+      queryClient.refetchQueries({
         queryKey: ["get_target_info"],
       });
     },
   });
 
-  const getBoardInfo = async () => {
+  const getTargetInfoService = async () => {
     const data = await apiService<ITargetResponse>({
       method: "GET",
       path: `target/info/${targetId}`,
     });
     return data;
   };
-  const { data: getTargetInfo, isPending: getTargetInfoIsPending } = useQuery({
+  const { data: getTargetInfo, isFetching: getTargetInfoIsPending } = useQuery({
     queryKey: ["get_target_info"],
-    queryFn: getBoardInfo,
+    queryFn: getTargetInfoService,
   });
 
   return {

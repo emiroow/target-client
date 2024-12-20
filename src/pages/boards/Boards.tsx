@@ -4,7 +4,7 @@ import FormikSelectInput from "@/components/common/FormikSelectInput";
 import FormikTextInput from "@/components/common/FormikTextInput";
 import Modal from "@/components/common/Modal";
 import { apiService } from "@/service/axiosService";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { MdClose } from "react-icons/md";
 import { RiImageAddLine } from "react-icons/ri";
@@ -41,38 +41,40 @@ const Boards = () => {
       }}
     >
       <div className="gap-3 grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 flex-wrap transition-all duration-300 delay-700 transform-gpu">
-        {isLoading ? (
-          <>
-            <BoardSkeleton />
-            <BoardSkeleton />
-            <BoardSkeleton />
-          </>
-        ) : (
-          boards?.data?.boardList?.map((item, index) => {
-            return (
-              <Board
-                editBoard={() => {
-                  BoardInfoMutating.mutate(item._id);
-                  setManageModal({
-                    modalState: true,
-                    actionType: "edit",
-                    board: item._id,
-                  });
-                }}
-                key={index}
-                data={item}
-                deleteBoard={() => {
-                  BoardInfoMutating.mutate(item._id);
-                  setManageModal({
-                    modalState: true,
-                    actionType: "delete",
-                    board: item._id,
-                  });
-                }}
-              />
-            );
-          })
-        )}
+        <AnimatePresence>
+          {isLoading ? (
+            <>
+              <BoardSkeleton />
+              <BoardSkeleton />
+              <BoardSkeleton />
+            </>
+          ) : (
+            boards?.data?.boardList?.map((item, index) => {
+              return (
+                <Board
+                  editBoard={() => {
+                    BoardInfoMutating.mutate(item._id);
+                    setManageModal({
+                      modalState: true,
+                      actionType: "edit",
+                      board: item._id,
+                    });
+                  }}
+                  key={index}
+                  data={item}
+                  deleteBoard={() => {
+                    BoardInfoMutating.mutate(item._id);
+                    setManageModal({
+                      modalState: true,
+                      actionType: "delete",
+                      board: item._id,
+                    });
+                  }}
+                />
+              );
+            })
+          )}
+        </AnimatePresence>
         <AddBoard
           onClick={() => {
             setManageModal({
