@@ -7,6 +7,7 @@ import {
 } from "@/utils/common/deciders";
 import { FC } from "react";
 import {
+  BsEye,
   BsFillPencilFill,
   BsFillTrashFill,
   BsThreeDotsVertical,
@@ -34,6 +35,15 @@ const TargetCard: FC<Props> = ({ data, editBoard, deleteBoard }) => {
             <BsThreeDotsVertical className="text-lg" />
           </button>
           <ul className="menu dropdown-content bg-base-200 rounded-lg -m-[10px] mt-1 gap-3 p-1.5">
+            <li>
+              <Link
+                to={`/target/${data._id}`}
+                className="tooltip tooltip-right p-0"
+                data-tip="نمایش"
+              >
+                <BsEye className="p-[8px] text-3xl text-info" />
+              </Link>
+            </li>
             <li>
               <button
                 onClick={() => editBoard?.()}

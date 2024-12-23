@@ -5,12 +5,14 @@ import { validateSchema } from "@/utils/common/joiValidator";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useFormik } from "formik";
 import Joi from "joi";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const useTask = () => {
   const { id: targetId } = useParams();
   const queryClient = useQueryClient();
+  const [editTask, setEditTask] = useState({ isEdit: false, id: "" });
   const schema = Joi.object({
     title: Joi.string().required().messages({
       "string.empty": "عنوان نباید خالی باشد",
@@ -108,6 +110,8 @@ const useTask = () => {
     changeTaskStatusMutation,
     getTargetInfo,
     getTargetInfoIsPending,
+    editTask,
+    setEditTask,
   };
 };
 

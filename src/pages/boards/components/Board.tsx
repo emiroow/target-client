@@ -4,11 +4,12 @@ import { motion } from "framer-motion";
 import { FC } from "react";
 
 import {
+  BsEye,
   BsFillPencilFill,
   BsFillTrashFill,
   BsThreeDotsVertical,
 } from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const Board: FC<{
   data: NonNullable<IBoardResponse["boardList"]>[number];
   editBoard?: () => void;
@@ -35,6 +36,15 @@ const Board: FC<{
           <BsThreeDotsVertical className="text-lg" />
         </button>
         <ul className="menu dropdown-content bg-base-200 rounded-lg -m-1.5 mt-0.5 gap-3 p-1.5">
+          <li>
+            <Link
+              to={`/board/${data._id}`}
+              className="tooltip tooltip-right p-0"
+              data-tip="نمایش"
+            >
+              <BsEye className="p-[8px] text-3xl text-info" />
+            </Link>
+          </li>
           <li>
             <button
               onClick={async () => {

@@ -1,19 +1,26 @@
+import { useFormik } from "formik";
+import { FC } from "react";
 import { BiPlus } from "react-icons/bi";
 import FormikTextInput from "../../../components/common/FormikTextInput";
 import useTask from "../useTask";
-const AddTask = () => {
-  const { taskFormik, createTaskMutation } = useTask();
+interface Props {
+  formik: ReturnType<typeof useFormik<any>>;
+}
+const AddTask: FC<Props> = ({ formik }) => {
+  const { createTaskMutation, editTask } = useTask();
+
+  console.log(editTask);
 
   return (
     <form
-      onSubmit={taskFormik.handleSubmit}
+      onSubmit={formik.handleSubmit}
       className="w-[95%] md:w-[60%] lg:w-[50%] 2xl:w-[30%] m-auto flex flex-row justify-between gap-1"
     >
       <FormikTextInput
         name="title"
         placeholder="هدف"
         className="w-full"
-        formik={taskFormik}
+        formik={formik}
         innerSymbol="عنوان"
       />
       <div className="tooltip" data-tip="ایجاد هدف">
@@ -31,5 +38,4 @@ const AddTask = () => {
     </form>
   );
 };
-
 export default AddTask;

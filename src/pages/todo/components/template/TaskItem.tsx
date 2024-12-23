@@ -3,7 +3,6 @@ import { convertPersianDate } from "@/utils/common/date";
 import { AnimatePresence, motion } from "framer-motion";
 import { FC } from "react";
 import {
-  BsEye,
   BsFillPencilFill,
   BsFillTrashFill,
   BsThreeDotsVertical,
@@ -72,7 +71,10 @@ const TaskItem: FC<Props> = ({ deleteBoard, editBoard, data }) => {
                 }
               />
               {/* todo title */}
-              <label htmlFor={data?._id} className=" font-light cursor-pointer">
+              <label
+                htmlFor={data?._id}
+                className=" font-light cursor-pointer break-words pe-5"
+              >
                 {data?.title}
               </label>
             </div>
@@ -90,14 +92,6 @@ const TaskItem: FC<Props> = ({ deleteBoard, editBoard, data }) => {
                   <BsThreeDotsVertical className="text-lg" />
                 </button>
                 <ul className="menu dropdown-content bg-base-200 rounded-lg -m-[8px] mt-1 gap-3 z-50">
-                  <li>
-                    <button
-                      className="tooltip tooltip-right p-0"
-                      data-tip="جزئیات"
-                    >
-                      <BsEye className="p-[8px] text-3xl text-info" />
-                    </button>
-                  </li>
                   <li>
                     <button
                       onClick={() => editBoard?.()}

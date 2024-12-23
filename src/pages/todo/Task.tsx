@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import AddTodo from "./components/AddTask";
+import AddTask from "./components/AddTask";
 import TodoInfoBox from "./components/taskInfoBox";
 import TaskItemSkeleton from "./components/TaskItemSkeleton";
 import ContentBox from "./components/template/ContentBox";
@@ -7,7 +7,8 @@ import TodoItem from "./components/template/TaskItem";
 import useTask from "./useTask";
 
 const Task = () => {
-  const { getTasksQueryIsLoading, getTasksQuery } = useTask();
+  const { getTasksQueryIsLoading, getTasksQuery, taskFormik, setEditTask } =
+    useTask();
   return (
     <motion.div
       initial={{ opacity: 0, scale: 1 }}
@@ -26,7 +27,7 @@ const Task = () => {
             {/* box info */}
             <TodoInfoBox />
             {/* Add Box */}
-            <AddTodo />
+            <AddTask formik={taskFormik} />
             {/* content box */}
             <ContentBox>
               <AnimatePresence>
@@ -41,7 +42,16 @@ const Task = () => {
                   </>
                 ) : getTasksQuery?.data?.length ? (
                   getTasksQuery?.data?.map((item, index) => {
-                    return <TodoItem data={item} key={index} />;
+                    return (
+                      <TodoItem
+                        editBoard={() => {
+                          taskFormik.setValues({ title: item.title || "" });
+                          setEditTask({ isEdit: true, id: item._id || "" });
+                        }}
+                        data={item}
+                        key={index}
+                      />
+                    );
                   })
                 ) : (
                   <div className="w-full border border-secondary text-center flex items-center justify-center rounded p-5 h-[53vh] bg-main/50">
