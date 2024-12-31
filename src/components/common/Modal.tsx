@@ -55,7 +55,7 @@ const Modal: FC<Props> = ({
           transition={{ duration: 0.3, delay: 0.1, ease: [0, 0.71, 0.2, 1.01] }}
         >
           {/* container */}
-          <div className="w-full h-[100vh] overflow-x-hidden overflow-y-auto fixed justify-center items-center content-center inset-0 z-30 outline-none focus:outline-none bg-black/40 top-0 left-0">
+          <div className="w-full h-[100vh] overflow-x-hidden overflow-y-auto fixed justify-center items-center content-center inset-0 z-50 outline-none focus:outline-none bg-black/40 top-0 left-0">
             {/* box */}
             <div
               className={`max-sm:w-[95%] ${

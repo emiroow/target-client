@@ -4,7 +4,7 @@ import FormikSelectInput from "@/components/common/FormikSelectInput";
 import FormikTextInput from "@/components/common/FormikTextInput";
 import Modal from "@/components/common/Modal";
 import { apiService } from "@/service/axiosService";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { MdClose } from "react-icons/md";
 import { RiImageAddLine } from "react-icons/ri";
@@ -31,15 +31,7 @@ const Boards = () => {
   } = useBoards();
   const [uploadLoader, setLoader] = useState(false);
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 1 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{
-        duration: 0.8,
-        delay: 0.1,
-        ease: [0, 0.71, 0.2, 1.01],
-      }}
-    >
+    <>
       <div className="gap-3 grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 flex-wrap transition-all duration-300 delay-700 transform-gpu">
         <AnimatePresence>
           {isLoading ? (
@@ -184,7 +176,9 @@ const Boards = () => {
                             <div
                               className="absolute inset-0 bg-cover bg-center transition-transform duration-300 transform group-hover:scale-125 rounded-b-lg"
                               style={{
-                                backgroundImage: `url("${BoardFormik.values.backgroundImageUrl}")`,
+                                backgroundImage: `url("${
+                                  import.meta.env.VITE_FILE_BASE_URL
+                                }${BoardFormik.values.backgroundImageUrl}")`,
                               }}
                             ></div>
                           </div>
@@ -232,9 +226,7 @@ const Boards = () => {
                                   },
                                 },
                               });
-                              const fullUrl = `${
-                                import.meta.env.VITE_FILE_BASE_URL
-                              }${uploadImage.data?.url}`;
+                              const fullUrl = uploadImage.data?.url;
                               if (uploadImage.status) {
                                 BoardFormik.setFieldValue(
                                   "backgroundImageUrl",
@@ -274,9 +266,7 @@ const Boards = () => {
                     disable={!!BoardFormik.values.backgroundImageUrl}
                     disableRemoveBtn={!BoardFormik.values.backgroundImageUrl}
                     onExtraChange={(e) => {
-                      const fullUrl = `${import.meta.env.VITE_FILE_BASE_URL}${
-                        e.target.value
-                      }`;
+                      const fullUrl = e.target.value;
                       BoardFormik.setFieldValue("backgroundImageUrl", fullUrl);
                     }}
                   />
@@ -304,7 +294,7 @@ const Boards = () => {
       </Modal>
 
       {/* delete Board  */}
-    </motion.div>
+    </>
   );
 };
 

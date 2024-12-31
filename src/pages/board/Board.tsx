@@ -73,6 +73,7 @@ const Board = () => {
               <button
                 onClick={() => {
                   setBoardEditModal({ boardId: id, boardState: true });
+                  console.log(boardInfo);
                   BoardFormik.setValues({
                     backgroundImageUrl: boardInfo?.data?.backgroundImageUrl,
                     date: boardInfo?.data?.date,
@@ -296,7 +297,9 @@ const Board = () => {
                         <div
                           className="absolute inset-0 bg-cover bg-center transition-transform duration-300 transform group-hover:scale-125 rounded-b-lg"
                           style={{
-                            backgroundImage: `url("${BoardFormik.values.backgroundImageUrl}")`,
+                            backgroundImage: `url("${
+                              import.meta.env.VITE_FILE_BASE_URL
+                            }${BoardFormik.values.backgroundImageUrl}")`,
                           }}
                         ></div>
                       </div>
@@ -344,9 +347,7 @@ const Board = () => {
                               },
                             },
                           });
-                          const fullUrl = `${
-                            import.meta.env.VITE_FILE_BASE_URL
-                          }${uploadImage.data?.url}`;
+                          const fullUrl = uploadImage.data?.url;
                           if (uploadImage.status) {
                             BoardFormik.setFieldValue(
                               "backgroundImageUrl",
@@ -383,9 +384,7 @@ const Board = () => {
                 disable={!!BoardFormik.values.backgroundImageUrl}
                 disableRemoveBtn={!BoardFormik.values.backgroundImageUrl}
                 onExtraChange={(e) => {
-                  const fullUrl = `${import.meta.env.VITE_FILE_BASE_URL}${
-                    e.target.value
-                  }`;
+                  const fullUrl = e.target.value;
                   BoardFormik.setFieldValue("backgroundImageUrl", fullUrl);
                 }}
               />

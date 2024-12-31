@@ -14,8 +14,8 @@ export const router = createBrowserRouter([
     path: "/",
     element: <FullTemplate />,
     children: [
-      { path: "/board/:id", element: <Board /> },
       { path: "/boards", element: <Boards /> },
+      { path: "/board/:id", element: <Board /> },
       { path: "/target/:id", element: <Todo /> },
     ],
   },

@@ -302,7 +302,7 @@ const useBoard = () => {
   const { data: uploads } = useQuery({
     queryKey: ["GET_UPLOADS", setBoardEditModal],
     queryFn: getUploadList,
-    enabled: editTargetModal.isOpen,
+    enabled: editBoardModal.boardState,
     refetchOnMount: true,
   });
 

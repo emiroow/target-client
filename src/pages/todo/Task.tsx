@@ -1,3 +1,4 @@
+import Modal from "@/components/common/Modal";
 import { AnimatePresence, motion } from "framer-motion";
 import AddTask from "./components/AddTask";
 import TodoInfoBox from "./components/taskInfoBox";
@@ -7,8 +8,17 @@ import TodoItem from "./components/template/TaskItem";
 import useTask from "./useTask";
 
 const Task = () => {
-  const { getTasksQueryIsLoading, getTasksQuery, taskFormik, setEditTask } =
-    useTask();
+  const {
+    getTasksQueryIsLoading,
+    getTasksQuery,
+    taskFormik,
+    setEditTask,
+    editTask,
+    setDeleteState,
+    deleteTaskState,
+    deleteTaskServiceMutation,
+  } = useTask();
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 1 }}
@@ -27,7 +37,7 @@ const Task = () => {
             {/* box info */}
             <TodoInfoBox />
             {/* Add Box */}
-            <AddTask formik={taskFormik} />
+            <AddTask formik={taskFormik} taskEditState={editTask} />
             {/* content box */}
             <ContentBox>
               <AnimatePresence>
@@ -50,6 +60,9 @@ const Task = () => {
                         }}
                         data={item}
                         key={index}
+                        deleteBoard={() =>
+                          setDeleteState({ id: item._id || "", isOpen: true })
+                        }
                       />
                     );
                   })
@@ -63,6 +76,31 @@ const Task = () => {
           </div>
         </div>
       </div>
+      <Modal
+        modalState={deleteTaskState.isOpen}
+        modalStateSetter={setDeleteState}
+        size="w-2/5"
+        title="حذف هدف"
+        onCloseESC={() => setDeleteState({ id: "", isOpen: false })}
+        onCloseBackDrop={() => setDeleteState({ id: "", isOpen: false })}
+        onDelete={() => deleteTaskServiceMutation.mutate(deleteTaskState.id)}
+      >
+        <>
+          {deleteTaskServiceMutation.isPending ? (
+            <div className="w-full flex justify-center items-center p-24">
+              <span className="loading loading-spinner loading-md text-white"></span>
+            </div>
+          ) : (
+            <div className="text-center mt-10 text-xl mb-5">
+              <span> آیا از خذف بورد </span>
+              <span className="text-secondary font-bold">
+                {/* {deleteTaskServiceMutation.data?.data?.title} */}
+              </span>
+              <span> مطمئن هستید ؟</span>
+            </div>
+          )}
+        </>
+      </Modal>
     </motion.div>
   );
 };

@@ -75,7 +75,7 @@ const useBoards = () => {
       selectBackgroundImageUrl: "",
     },
     onSubmit: (formData) => {
-      const data = structuredClone(formData);
+      let data = structuredClone(formData);
       delete data.selectBackgroundImageUrl;
       switch (manageModal.actionType) {
         case "create":

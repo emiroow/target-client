@@ -13,6 +13,7 @@ const useTask = () => {
   const { id: targetId } = useParams();
   const queryClient = useQueryClient();
   const [editTask, setEditTask] = useState({ isEdit: false, id: "" });
+  const [deleteTaskState, setDeleteState] = useState({ isOpen: false, id: "" });
   const schema = Joi.object({
     title: Joi.string().required().messages({
       "string.empty": "عنوان نباید خالی باشد",
@@ -26,7 +27,15 @@ const useTask = () => {
       title: "",
     },
     onSubmit: (value) => {
-      createTaskMutation.mutate(value);
+      if (editTask.isEdit)
+        updateTaskStatusMutation.mutate({
+          taskId: editTask.id,
+          title: value.title,
+        });
+      else createTaskMutation.mutate(value);
+    },
+    onReset: () => {
+      setEditTask({ isEdit: false, id: "" });
     },
   });
 
@@ -88,6 +97,28 @@ const useTask = () => {
     },
   });
 
+  const updateTaskStatus = async (body: { title: string; taskId?: string }) => {
+    const data = await apiService({
+      method: "PUT",
+      path: `/task/update/${body.taskId}`,
+      Option: { data: { title: body.title } },
+    });
+    return data;
+  };
+  const updateTaskStatusMutation = useMutation({
+    mutationFn: updateTaskStatus,
+    onSuccess: () => {
+      setEditTask({ isEdit: false, id: "" });
+      taskFormik.resetForm();
+      queryClient.refetchQueries({
+        queryKey: ["get_tasks"],
+      });
+      queryClient.refetchQueries({
+        queryKey: ["get_target_info"],
+      });
+    },
+  });
+
   const getTargetInfoService = async () => {
     const data = await apiService<ITargetResponse>({
       method: "GET",
@@ -98,6 +129,21 @@ const useTask = () => {
   const { data: getTargetInfo, isFetching: getTargetInfoIsPending } = useQuery({
     queryKey: ["get_target_info"],
     queryFn: getTargetInfoService,
+  });
+
+  const deleteTaskService = async (taskId: string) => {
+    const data = await apiService({
+      method: "delete",
+      path: `task/delete/${taskId}`,
+    });
+    return data;
+  };
+  const deleteTaskServiceMutation = useMutation({
+    mutationFn: deleteTaskService,
+    mutationKey: ["delete-task-mutation"],
+    onSuccess: (res) => {
+      console.log(res);
+    },
   });
 
   return {
@@ -112,6 +158,11 @@ const useTask = () => {
     getTargetInfoIsPending,
     editTask,
     setEditTask,
+    updateTaskStatusMutation,
+    deleteTaskState,
+    setDeleteState,
+    deleteTaskService,
+    deleteTaskServiceMutation,
   };
 };
 
