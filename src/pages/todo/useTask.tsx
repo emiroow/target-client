@@ -141,8 +141,15 @@ const useTask = () => {
   const deleteTaskServiceMutation = useMutation({
     mutationFn: deleteTaskService,
     mutationKey: ["delete-task-mutation"],
-    onSuccess: (res) => {
-      console.log(res);
+    onSuccess: () => {
+      setDeleteState({ id: "", isOpen: false });
+      taskFormik.resetForm();
+      queryClient.refetchQueries({
+        queryKey: ["get_tasks"],
+      });
+      queryClient.refetchQueries({
+        queryKey: ["get_target_info"],
+      });
     },
   });
 
