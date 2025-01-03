@@ -6,7 +6,7 @@ import Loading from "../components/templates/components/Loading";
 const Providers = ({ children }: { children: React.ReactElement }) => {
   const queryClient = new QueryClient({
     defaultOptions: {
-      queries: { retry: false, refetchOnWindowFocus: false },
+      queries: { refetchOnWindowFocus: false },
     },
   });
 
