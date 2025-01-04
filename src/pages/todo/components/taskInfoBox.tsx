@@ -60,7 +60,7 @@ const TaskInfoBox = () => {
                     getTargetInfo?.data?.status === TARGET_STATUS.FINISHED
                       ? "badge-success "
                       : "badge-warning"
-                  } p-3 text-[12px] text-white gap-1 shadow-md drop-shadow-md`}
+                  } p-3 text-[12px] text-white gap-1 shadow-md drop-shadow-md mt-4`}
                 >
                   {getTargetInfo?.data?.status === TARGET_STATUS.FINISHED ? (
                     <FaCheck />

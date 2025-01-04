@@ -6,6 +6,16 @@ export interface ITargetResponse {
   title?: string;
   subTitle?: string;
   description?: string;
+  lastTargetHistory?: {
+    _id?: string;
+    checked?: boolean;
+    title?: string;
+    user?: string;
+    target?: any;
+    createdAt?: string;
+    updatedAt?: string;
+    __v?: number;
+  }[];
   emoji?: string;
   user?: string;
   board?: Board;

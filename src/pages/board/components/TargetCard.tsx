@@ -88,18 +88,21 @@ const TargetCard: FC<Props> = ({ data, editBoard, deleteBoard }) => {
           <div className="w-full mt-4">
             <p className="font-sansBold text-sm">اهداف اخیر</p>
             <div className="flex flex-col gap-2 mt-2">
-              <section className="w-full flex justify-between bg-base-300 p-3 rounded-lg glass">
-                <span className="text-xs">عنوان</span>
-                <span className="text-xs">tets</span>
-              </section>
-              <section className="w-full flex justify-between bg-red-800 p-3 rounded-lg glass">
-                <span className="text-xs">عنوان</span>
-                <span className="text-xs">tets</span>
-              </section>
-              <section className="w-full flex justify-between bg-green-800 p-3 rounded-lg glass">
-                <span className="text-xs">عنوان</span>
-                <span className="text-xs">tets</span>
-              </section>
+              {data.lastTargetHistory?.map((item, index) => {
+                return (
+                  <section
+                    key={index}
+                    className={`w-full flex justify-between ${
+                      item.checked ? "bg-green-700" : "bg-yellow-700"
+                    } p-3 rounded-lg glass`}
+                  >
+                    <span className="text-xs text-white">{item.title}</span>
+                    <span className="text-xs text-white">
+                      {item.checked ? "انجام شده" : " در حال انجام"}
+                    </span>
+                  </section>
+                );
+              })}
             </div>
           </div>
 
