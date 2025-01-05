@@ -2,6 +2,7 @@ import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import AuthTemplate from "./components/templates/AuthTemplate";
 import FullTemplate from "./components/templates/FullTemplate";
+import Timer from "./pages/timer/Timer";
 const Board = lazy(() => import("./pages/board/Board"));
 const Todo = lazy(() => import("./pages/todo/Task"));
 const Boards = lazy(() => import("./pages/boards/Boards"));
@@ -17,6 +18,7 @@ export const router = createBrowserRouter([
       { path: "/boards", element: <Boards /> },
       { path: "/board/:id", element: <Board /> },
       { path: "/target/:id", element: <Todo /> },
+      { path: "/timer", element: <Timer /> },
     ],
   },
   {

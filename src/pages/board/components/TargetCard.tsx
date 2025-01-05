@@ -85,26 +85,28 @@ const TargetCard: FC<Props> = ({ data, editBoard, deleteBoard }) => {
           <p className="text-sm mt-3">{data.description}</p>
 
           {/* recently */}
-          <div className="w-full mt-4">
-            <p className="font-sansBold text-sm">اهداف اخیر</p>
-            <div className="flex flex-col gap-2 mt-2">
-              {data.lastTargetHistory?.map((item, index) => {
-                return (
-                  <section
-                    key={index}
-                    className={`w-full flex justify-between ${
-                      item.checked ? "bg-green-700" : "bg-yellow-700"
-                    } p-3 rounded-lg glass`}
-                  >
-                    <span className="text-xs text-white">{item.title}</span>
-                    <span className="text-xs text-white">
-                      {item.checked ? "انجام شده" : " در حال انجام"}
-                    </span>
-                  </section>
-                );
-              })}
+          {!!data.lastTargetHistory?.length && (
+            <div className="w-full mt-4">
+              <p className="font-sansBold text-sm">اهداف اخیر</p>
+              <div className="flex flex-col gap-2 mt-2">
+                {data.lastTargetHistory?.map((item, index) => {
+                  return (
+                    <section
+                      key={index}
+                      className={`w-full flex justify-between ${
+                        item.checked ? "bg-green-700" : "bg-yellow-700"
+                      } p-3 rounded-lg glass`}
+                    >
+                      <span className="text-xs text-white">{item.title}</span>
+                      <span className="text-xs text-white">
+                        {item.checked ? "انجام شده" : " در حال انجام"}
+                      </span>
+                    </section>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* target info */}
           <div className="w-full mt-4">

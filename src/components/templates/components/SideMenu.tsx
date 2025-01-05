@@ -92,7 +92,7 @@ const SideMenu = () => {
           <li className="hover:text-secondary">
             <NavLink
               className={({ isActive }) => (isActive ? "text-secondary" : "")}
-              to={"/timeLine"}
+              to={"/timer"}
             >
               <RiTimerFlashLine className="text-2xl" />
               <span>تایمر</span>
@@ -151,7 +151,7 @@ const SideMenu = () => {
                   ? "ransition-all bg-secondary/50 w-[85%] flex justify-end p-3 rounded-e-xl"
                   : `transition-all hover:bg-secondary/50 w-[85%] flex justify-end p-3 rounded-e-xl`
               }
-              to={"/timeLine"}
+              to={"/timer"}
             >
               <RiTimerFlashLine className="text-3xl" />
             </NavLink>
