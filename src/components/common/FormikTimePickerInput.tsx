@@ -11,8 +11,6 @@ interface Props {
   name: string;
   placeholder?: string;
   label?: string;
-  innerIcon?: { position: "right" | "left"; icon: any };
-  innerSymbol?: string;
   disable?: boolean;
   readOnly?: boolean;
   className?: string;
@@ -22,7 +20,8 @@ interface Props {
     onSubmit?: () => void;
     icon: any;
     type: "reset" | "submit";
-    position: "right" | "left";
+    onClick?: () => void;
+    disable?: boolean;
   };
   onExtraChange?: () => void;
 }
@@ -37,6 +36,7 @@ const FormikTimePickerInput: FC<Props> = ({
   required,
   placeholder,
   onExtraChange,
+  innerButton,
 }) => {
   const CustomInput = ({ onFocus, value, onChange }: any) => {
     return (
@@ -49,6 +49,16 @@ const FormikTimePickerInput: FC<Props> = ({
         <label
           className={`input max-sm:input-sm input-secondary input-bordered flex items-center gap-2 ${className}`}
         >
+          {/* inner btn  pos left*/}
+          {innerButton && innerButton.disable && (
+            <button
+              className="btn btn-sm btn-square btn-secondary"
+              type={innerButton.type}
+              onClick={innerButton?.onClick}
+            >
+              {innerButton.icon}
+            </button>
+          )}
           <input
             onFocus={onFocus}
             value={value}
@@ -78,33 +88,7 @@ const FormikTimePickerInput: FC<Props> = ({
       calendarPosition="bottom-right"
       onChange={(selectedDate) => {
         if (selectedDate) {
-          const options: any = {
-            timeZone: "Asia/Tehran",
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-            fractionalSecondDigits: 3,
-            hour12: false,
-          };
-          const formatter = new Intl.DateTimeFormat("en-GB", options);
-          const parts = formatter.formatToParts(selectedDate.toDate());
-          const year = parts.find((p: any) => p.type === "year")?.value;
-          const month = parts.find((p: any) => p.type === "month")?.value;
-          const day = parts.find((p: any) => p.type === "day")?.value;
-          const hour = parts.find((p: any) => p.type === "hour")?.value;
-          const minute = parts.find((p: any) => p.type === "minute")?.value;
-          const second = parts.find((p: any) => p.type === "second")?.value;
-          const fractionalSecond =
-            parts.find((p: any) => p.type === "fractionalSecond")?.value ||
-            "000";
-          const tehranTime = `${year}-${month}-${day}T${hour}:${minute}:${second}.${fractionalSecond}`;
-          formik.setFieldValue(
-            name,
-            selectedDate?.isValid ? `${tehranTime}Z` : ""
-          );
+          formik.setFieldValue(name, selectedDate?.isValid ? selectedDate : "");
         } else {
           formik.setFieldValue(name, "");
         }
