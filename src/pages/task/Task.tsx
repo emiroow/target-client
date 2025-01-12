@@ -29,51 +29,48 @@ const Task = () => {
         ease: [0, 0.71, 0.2, 1.01],
       }}
     >
-      <div className="rounded-lg flex flex-col gap-3">
-        {/* container */}
-        <div className="w-full justify-center d-flex mt-5 sm:mt-5">
-          {/* Box,s */}
-          <div className="flex gap-3 flex-col">
-            {/* box info */}
-            <TodoInfoBox />
-            {/* Add Box */}
-            <AddTask formik={taskFormik} taskEditState={editTask} />
-            {/* content box */}
-            <ContentBox>
-              <AnimatePresence>
-                {getTasksQueryIsLoading ? (
-                  <>
-                    <TaskItemSkeleton />
-                    <TaskItemSkeleton />
-                    <TaskItemSkeleton />
-                    <TaskItemSkeleton />
-                    <TaskItemSkeleton />
-                    <TaskItemSkeleton />
-                  </>
-                ) : getTasksQuery?.data?.length ? (
-                  getTasksQuery?.data?.map((item, index) => {
-                    return (
-                      <TodoItem
-                        editBoard={() => {
-                          taskFormik.setValues({ title: item.title || "" });
-                          setEditTask({ isEdit: true, id: item._id || "" });
-                        }}
-                        data={item}
-                        key={index}
-                        deleteBoard={() =>
-                          setDeleteState({ id: item._id || "", isOpen: true })
-                        }
-                      />
-                    );
-                  })
-                ) : (
-                  <div className="w-full border border-secondary text-center flex items-center justify-center rounded p-5 h-[53vh] bg-main/50">
-                    (خالی)
-                  </div>
-                )}
-              </AnimatePresence>
-            </ContentBox>
-          </div>
+      <div className="w-full justify-center d-flex mt-5 sm:mt-5">
+        {/* Box,s */}
+        <div className="flex gap-3 flex-col">
+          {/* box info */}
+          <TodoInfoBox />
+          {/* Add Box */}
+          <AddTask formik={taskFormik} taskEditState={editTask} />
+          {/* content box */}
+          <ContentBox>
+            <AnimatePresence>
+              {getTasksQueryIsLoading ? (
+                <>
+                  <TaskItemSkeleton />
+                  <TaskItemSkeleton />
+                  <TaskItemSkeleton />
+                  <TaskItemSkeleton />
+                  <TaskItemSkeleton />
+                  <TaskItemSkeleton />
+                </>
+              ) : getTasksQuery?.data?.length ? (
+                getTasksQuery?.data?.map((item, index) => {
+                  return (
+                    <TodoItem
+                      editBoard={() => {
+                        taskFormik.setValues({ title: item.title || "" });
+                        setEditTask({ isEdit: true, id: item._id || "" });
+                      }}
+                      data={item}
+                      key={index}
+                      deleteBoard={() =>
+                        setDeleteState({ id: item._id || "", isOpen: true })
+                      }
+                    />
+                  );
+                })
+              ) : (
+                <div className="w-full border border-secondary text-center flex items-center justify-center rounded p-5 h-[53vh] bg-main/50">
+                  (خالی)
+                </div>
+              )}
+            </AnimatePresence>
+          </ContentBox>
         </div>
       </div>
       <Modal

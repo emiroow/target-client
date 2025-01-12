@@ -16,7 +16,7 @@ const AddTask: FC<Props> = ({ formik, taskEditState }) => {
     <form
       onSubmit={formik.handleSubmit}
       onReset={formik.handleReset}
-      className="w-[95%] md:w-[60%] lg:w-[50%] 2xl:w-[30%] m-auto flex flex-row justify-between gap-1"
+      className="w-[95%] md:w-[60%] lg:w-[50%] 2xl:w-[40%] m-auto flex flex-row justify-between gap-1"
     >
       <FormikTextInput
         name="title"

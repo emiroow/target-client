@@ -4,7 +4,7 @@ import AuthTemplate from "./components/templates/AuthTemplate";
 import FullTemplate from "./components/templates/FullTemplate";
 import Timer from "./pages/timer/Timer";
 const Board = lazy(() => import("./pages/board/Board"));
-const Todo = lazy(() => import("./pages/todo/Task"));
+const Todo = lazy(() => import("./pages/task/Task"));
 const Boards = lazy(() => import("./pages/boards/Boards"));
 const Login = lazy(() => import("./pages/auth/Login"));
 const SignUp = lazy(() => import("./pages/auth/SignUp"));

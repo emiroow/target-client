@@ -10,7 +10,7 @@ const TaskInfoBox = () => {
   const { getTargetInfo, getTargetInfoIsPending } = useTask();
 
   return (
-    <div className=" w-[95%] md:w-[60%] lg:w-[50%] 2xl:w-[30%] m-auto border rounded sm:p-5 sm:py-8 p-3 ">
+    <div className=" w-[95%] md:w-[60%] lg:w-[50%]  2xl:w-[40%] m-auto border rounded sm:p-5 sm:py-8 p-3 ">
       <AnimatePresence mode="wait">
         {getTargetInfoIsPending ? (
           <motion.div
