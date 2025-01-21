@@ -9,9 +9,9 @@ export default defineConfig({
     host: true,
     proxy: {
       "/api": {
-        target: "http://5.75.194.114:3001",
+        target: "https://5.75.194.114:3001", // Change this to HTTPS
         changeOrigin: true,
-        secure: false,
+        secure: false, // Set to false if the backend doesn't have a valid certificate
       },
     },
   },
