@@ -7,6 +7,13 @@ export default defineConfig({
   server: {
     port: 6005,
     host: true,
+    proxy: {
+      "/api": {
+        target: "http://5.75.194.114:3001",
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
   resolve: {
     alias: {
